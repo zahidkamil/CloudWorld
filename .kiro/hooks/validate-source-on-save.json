@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate source on save",
+      "trigger": "PostFileSave",
+      "description": "Runs typecheck, ESLint on the saved file, and related Vitest tests after a source file is saved.",
+      "matcher": "src/.*\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "node scripts/hook-validate.mjs",
+        "timeout": 120
+      }
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+.world-shell {
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--bg-0);
+}
+
+.world-shell[data-theme='haunted-world'] {
+  background: #2a1206;
+}
+
+.hud-bar {
+  position: absolute;
+  z-index: 10;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(10, 14, 26, 0.72);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+}
+
+.hud-title {
+  display: grid;
+  margin-right: auto;
+  line-height: 1.1;
+}
+
+.hud-title__brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: #a5b4fc;
+}
+
+.hud-title__world {
+  font-weight: 700;
+}
+
+.hud-group {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.8);
+}
+
+.hud-button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: rgba(30, 41, 59, 0.85);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.hud-group .hud-button {
+  background: transparent;
+}
+
+.hud-button:hover {
+  border-color: var(--line);
+}
+
+.hud-button.is-active {
+  background: var(--accent-strong);
+  color: white;
+}
+
+.hud-select select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(30, 41, 59, 0.85);
+  font-weight: 600;
+}
+
+.world-stage {
+  position: relative;
+  grid-row: 1 / -1;
+  display: grid;
+  place-items: center;
+}
+
+.world-stage__message {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.world-stage__message strong {
+  color: var(--text);
+}
+
+.world-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.world-canvas canvas {
+  display: block;
+  touch-action: none;
+}

@@ -1,0 +1,36 @@
+# Dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Test output
+.screenshots/
+.playwright-mcp/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# Local-only planning document (kept out of the repository by request)
+docs/implementation-plan.md
+
+# Blender working files (only exported, optimized GLBs are committed)
+*.blend
+*.blend1
+blender/work/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+npm-debug.log*
