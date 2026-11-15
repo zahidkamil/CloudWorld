@@ -27,6 +27,12 @@ terraform show -json plan.tfplan > plan.json
 
 Upload or paste `plan.json` in CloudWorld. The file never leaves your browser.
 
+## Worlds
+
+Each world is a library in `worlds/<id>/` (how every AWS resource looks, plus reference image names) and
+`public/worlds/<id>/` (GLB models and `library.json`). To add one, use the `create-cloudworld-world` Skill in
+`.kiro/skills/`, or run the `create-world` Kiro Workflow, and see `worlds/README.md`.
+
 ## Project layout
 
 See `.kiro/steering/structure.md`. Specs live in `.kiro/specs/`; progress in `docs/PROGRESS.md`.

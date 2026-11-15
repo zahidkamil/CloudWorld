@@ -1,7 +1,7 @@
 # Tasks — Game Interface
 
 - [x] 1. Landing shell
-  - [x] 1.1 Landing with brand, mode picker, world cards (interim art), Create World panel
+  - [x] 1.1 Landing with brand, mode picker, world cards (interim art). Create World panel removed until the BYO-key task
   - [x] 1.2 WorldShell HUD with menu, mode, theme switch; navigation tests and smoke e2e
   - _Requirements: R1.1, R2.1, R6.1, R6.2_
 
@@ -23,6 +23,10 @@
   - [ ] 7.2 State preservation across mode/theme switches; responsive and keyboard checks
   - _Requirements: R1.2, R2.2, R6_
 
-- [ ] 8. Create World UI
-  - [ ] 8.1 Prompt feedback (recognized/unsupported), saved world cards, delete
+- [ ] 8. Saved world cards
+  - [ ] 8.1 Saved themes appear as cards, with delete
   - _Requirements: R1.3_
+
+- [ ] 13. Create World entry (DEFERRED: probably not part of the hackathon submission)
+  - [ ] 13.1 "Create worlds with AI" key entry, provider picker, prompt, result and error states
+  - _Requirements: R1.4_

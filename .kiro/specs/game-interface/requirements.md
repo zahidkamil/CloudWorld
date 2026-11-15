@@ -5,9 +5,10 @@ The interface should feel like a game, not a developer dashboard.
 
 ## R1 Landing
 
-- R1.1 The landing screen SHALL show the CloudWorld brand, Explorer/Defender choice, world cards, and Create World.
+- R1.1 The landing screen SHALL show the CloudWorld brand, the Explorer/Defender choice, and world cards laid out like `docs/images/Game.png`.
+- R1.4 The Create World prompt SHALL NOT appear unless the user has entered an OpenAI or Anthropic API key (last task).
 - R1.2 World cards SHALL show previews captured from the real 3D scenes.
-- R1.3 Saved custom worlds SHALL appear as cards after built-in worlds.
+- R1.3 Saved custom worlds, once they exist, SHALL appear as cards after built-in worlds.
 
 ## R2 In-world HUD
 

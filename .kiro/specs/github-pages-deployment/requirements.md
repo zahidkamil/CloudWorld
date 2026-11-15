@@ -6,7 +6,7 @@ Static hosting at `https://zahidkamil.github.io/CloudWorld/`, CI quality gates, 
 
 - R1.1 The production build SHALL be fully static and served under `/CloudWorld/`.
 - R1.2 All assets (JS, CSS, GLB, previews, samples) SHALL resolve under the base path, including after reload.
-- R1.3 The site SHALL make no runtime API calls and require no installs, credentials, or backend.
+- R1.3 The site SHALL make no runtime API calls and require no installs, credentials, or backend. The only exception is the optional Create World feature, which calls the chosen LLM provider after the user enters their own key.
 
 ## R2 Pull request checks (target: `main`)
 

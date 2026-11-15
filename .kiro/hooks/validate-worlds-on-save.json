@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate world libraries on save",
+      "trigger": "PostFileSave",
+      "description": "Checks world.md and resources.md format, reference images, required entries, and built model files when a world library file is saved.",
+      "matcher": "^(.*/)?worlds/.*\\.md$|public/worlds/.*",
+      "action": {
+        "type": "command",
+        "command": "node scripts/validate-worlds.mjs",
+        "timeout": 30
+      }
+    }
+  ]
+}

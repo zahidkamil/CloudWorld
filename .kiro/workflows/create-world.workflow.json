@@ -1,0 +1,36 @@
+{
+  "name": "create-world",
+  "description": "Create a new CloudWorld world: instruction set, Blender models, library.json, registration, and verification.",
+  "inputs": {
+    "worldId": "string",
+    "worldName": "string",
+    "referenceImage": "file",
+    "brief": "prompt"
+  },
+  "steps": [
+    {
+      "type": "step",
+      "id": "design",
+      "agent": "world-builder",
+      "prompt": "Create the instruction set for a new CloudWorld world. Follow the create-cloudworld-world skill, steps 1 to 4.\n\nworldId: {{worldId}}\nworldName: {{worldName}}\nreferenceImage: {{referenceImage}} (a file name inside docs/images/, or 'none' when there is no image)\nbrief: {{brief}}\n\nCopy worlds/_template to worlds/{{worldId}}. If referenceImage is not 'none', read it and list its exact docs/images/ path under reference_images in world.md. Otherwise write the brief into the front matter and describe the look in words. Fill in world.md and resources.md, then run `npm run validate:worlds` and fix every error. Do not build 3D models in this step.\n\nWhen the resource list is ready, call send_message with severity warning and ask the user to review worlds/{{worldId}}/resources.md and adjust any looks. Continue only after the user confirms, then finish with send_message severity success and a one-paragraph summary."
+    },
+    {
+      "type": "step",
+      "id": "models",
+      "agent": "world-builder",
+      "prompt": "Build the 3D models for world {{worldId}} with the Blender MCP, following skill steps 5 and 6 and the entries in worlds/{{worldId}}/resources.md (the user has reviewed them).\n\nPrevious step summary:\n{{steps.design.output}}\n\nBuild structure and family entries first, then key services. Save reusable scripts in worlds/{{worldId}}/blender/. Look at each model from two angles and compare with the style source. Export optimized GLBs to public/worlds/{{worldId}}/models/ and set each finished entry to built. Run `npm run validate:worlds`. If Blender is unavailable or a tool needs approval you lack, call send_message with severity warning and ask the user. Finish with send_message severity success and the list of built and missing models."
+    },
+    {
+      "type": "step",
+      "id": "integrate",
+      "agent": "world-builder",
+      "prompt": "Integrate world {{worldId}} into the app, following skill steps 7 to 9.\n\nPrevious step summary:\n{{steps.models.output}}\n\nWrite public/worlds/{{worldId}}/library.json from world.md and resources.md, register the world ({{worldName}}) in the world list, then build the app and capture screenshots of the sample plan in this world (scripts/capture.mjs or Playwright MCP). Compare with the style source, fix obvious problems, and save public/worlds/{{worldId}}/preview.webp from the real scene. Finish with send_message severity success and the screenshot paths."
+    },
+    {
+      "type": "step",
+      "id": "verify",
+      "agent": "world-builder",
+      "prompt": "Verify world {{worldId}} without changing design decisions. Follow skill step 10.\n\nPrevious step summary:\n{{steps.integrate.output}}\n\nRun `npm run validate` and `npm run test:e2e`. Confirm that switching to this world does not change the graph, selection, or findings. Fix test or validation failures that your work caused. Do not commit or push. Report the checklist at the end of the skill with pass or fail for each item, then finish with send_message severity success (or error if anything still fails)."
+    }
+  ]
+}

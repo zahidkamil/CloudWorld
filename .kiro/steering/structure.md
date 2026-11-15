@@ -11,7 +11,7 @@ src/
     layout/       Deterministic world layout (pure)
     render/       Shared React Three Fiber scene, camera, highlighting
     security/     Defender rules and attack paths (pure)
-  themes/         ThemeDescriptor, variation, composer, storage, kits/<kit>/
+  themes/         ThemeDescriptor, library loader, variation, storage, (later) llm/
   apps/
     explorer/     Explorer-specific overlays
     defender/     Defender scoring, remediation, missions
@@ -20,10 +20,11 @@ src/
   styles/         Global CSS tokens
   test/           Vitest setup
 tests/e2e/        Playwright specs (tag cross-browser smoke tests with @smoke)
-public/assets/    Optimized GLBs + manifests, previews
+public/worlds/    Per-world library.json, models/*.glb, preview.webp (generated)
+worlds/           Per-world instruction sets: world.md, resources.md, blender/*.py; _template/
 scripts/          Dev and validation scripts
 .kiro/            specs, steering, skills, hooks
-docs/             PROGRESS.md and extension guides
+docs/             PROGRESS.md, extension guides, docs/images/ reference images
 ```
 
 ## Dependency direction

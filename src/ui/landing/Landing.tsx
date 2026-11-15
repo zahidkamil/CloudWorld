@@ -12,7 +12,6 @@ const MODES: { id: GameMode; label: string; description: string }[] = [
 export function Landing() {
   const enterWorld = useSession((s) => s.enterWorld);
   const [mode, setMode] = useState<GameMode>('explorer');
-  const [prompt, setPrompt] = useState('');
 
   return (
     <main className="landing">
@@ -75,29 +74,6 @@ export function Landing() {
               </li>
             ))}
           </ul>
-        </section>
-
-        <section aria-labelledby="create-heading" className="landing__section create-world">
-          <h2 id="create-heading" className="create-world__title">
-            <span aria-hidden="true">✦</span> Create your own world
-          </h2>
-          <p className="create-world__hint">Describe the environment you want to explore.</p>
-          <form className="create-world__form" onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="world-prompt" className="visually-hidden">
-              World description
-            </label>
-            <input
-              id="world-prompt"
-              className="create-world__input"
-              placeholder="A futuristic snowy city with glowing blue skyscrapers…"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-            />
-            <button type="submit" className="create-world__button" disabled>
-              Generate World
-            </button>
-          </form>
-          <p className="create-world__note">ThemeComposer is coming soon.</p>
         </section>
 
         <footer className="landing__footer">

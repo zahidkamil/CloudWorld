@@ -20,6 +20,9 @@ Two applications share one foundation (parser, graph, registry, topology, layout
 - Everything runs in the browser on GitHub Pages under `/CloudWorld/`. No backend, credentials, or API keys.
 - Plans stay in memory. Never log, persist, or display sensitive values.
 - Themes never change the graph, selection semantics, or security findings.
+- Each world is a library under `worlds/<id>/` plus `public/worlds/<id>/`. New worlds follow the `create-cloudworld-world` Skill and start from a reference image in `docs/images/`.
+- A reference image is optional for a world; a written brief is enough. Agents create worlds with the `create-world` Kiro Workflow and `world-builder` agent.
+- In-app Create World is removed. An LLM version (OpenAI or Anthropic key) is deferred and probably not part of the hackathon.
 - Defender remediation is simulated; never generate or modify Terraform.
 
 ## Progress

@@ -11,9 +11,9 @@
   - [ ] 3.3 Owner enables Pages (Source: GitHub Actions); first deploy after approval
   - _Requirements: R2, R3.1, R3.2, R5_
 
-- [ ] 11. Release hardening
-  - [ ] 11.1 Post-deploy smoke test against the live URL
-  - [ ] 11.2 Chromium screenshot baselines generated in CI container
-  - [ ] 11.3 Asset path and no-network-call checks
-  - [ ] 11.4 Final docs: README, extension guide, known limits
+- [ ] 12. Release hardening
+  - [ ] 12.1 Post-deploy smoke test against the live URL
+  - [ ] 12.2 Chromium screenshot baselines generated in CI container
+  - [ ] 12.3 Asset path checks for `public/worlds/*`, `validate:worlds` in CI, and no-network-call checks (LLM calls only after a key is entered)
+  - [ ] 12.4 Final docs: README, extension guide, known limits
   - _Requirements: R1.3, R3.3, R4_
