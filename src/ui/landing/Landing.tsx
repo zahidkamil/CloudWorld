@@ -11,6 +11,8 @@ const MODES: { id: GameMode; label: string; description: string }[] = [
 
 export function Landing() {
   const enterWorld = useSession((s) => s.enterWorld);
+  const openImport = useSession((s) => s.openImport);
+  const graph = useSession((s) => s.graph);
   const [mode, setMode] = useState<GameMode>('explorer');
 
   return (
@@ -76,6 +78,14 @@ export function Landing() {
           </ul>
         </section>
 
+        <section aria-labelledby="plan-heading" className="landing__section">
+          <h2 id="plan-heading" className="landing__label">
+            Your infrastructure
+          </h2>
+          <button type="button" className="landing__import" onClick={openImport}>
+            {graph ? `Replace plan (${graph.resources.length} resources loaded)` : 'Load a Terraform plan'}
+          </button>
+        </section>
         <footer className="landing__footer">
           Runs entirely in your browser. No AWS credentials, backend, or installs required.
         </footer>

@@ -5,8 +5,8 @@
   - [x] 1.2 WorldShell HUD with menu, mode, theme switch; navigation tests and smoke e2e
   - _Requirements: R1.1, R2.1, R6.1, R6.2_
 
-- [ ] 2. Import UI
-  - [ ] 2.1 ImportDialog with sample / upload / paste, PlanPreview, confirm and cancel
+- [x] 2. Import UI
+  - [x] 2.1 ImportDialog with sample / upload / paste, PlanPreview, confirm and cancel
   - _Requirements: R5_
 
 - [ ] 3. Inspector

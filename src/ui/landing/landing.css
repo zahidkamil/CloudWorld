@@ -199,3 +199,15 @@
   color: var(--text-dim);
   text-align: center;
 }
+
+.landing__import {
+  justify-self: start;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel-raised);
+  font-weight: 600;
+}
+.landing__import:hover {
+  border-color: var(--accent);
+}

@@ -7,13 +7,13 @@ Task numbers map to the global sequence in `docs/PROGRESS.md`.
   - [x] 1.2 Create engine/app/ui directory conventions and session store
   - _Requirements: all (foundation)_
 
-- [ ] 2. Terraform ingestion and topology
-  - [ ] 2.1 Write parser tests (root, nested modules, count/for_each, unknowns, invalid, unsupported version, sensitive values)
-  - [ ] 2.2 Implement plan parser and sanitizer
-  - [ ] 2.3 Implement edge extraction and shared dependency groups
-  - [ ] 2.4 Implement topology resolver (region, AZ, global, unresolved) with tests
-  - [ ] 2.5 Author multi-region sample plan (provider aliases, 2 regions, 3+ AZs, modules, count, for_each, shared SGs)
-  - [ ] 2.6 Import flow: sample / upload / paste, preview, confirm, failure recovery, temporary inspector
+- [x] 2. Terraform ingestion and topology
+  - [x] 2.1 Write parser tests (root, nested modules, count/for_each, unknowns, invalid, unsupported version, sensitive values)
+  - [x] 2.2 Implement plan parser and sanitizer
+  - [x] 2.3 Implement edge extraction and shared dependency groups
+  - [x] 2.4 Implement topology resolver (region, AZ, global, unresolved) with tests
+  - [x] 2.5 Author multi-region sample plan (provider aliases, 2 regions, 3+ AZs, modules, count, for_each, shared SGs)
+  - [x] 2.6 Import flow: sample / upload / paste, preview, confirm, failure recovery, temporary inspector
   - _Requirements: R1, R2.1, R3_
 
 - [ ] 3. Multi-region 3D vertical slice

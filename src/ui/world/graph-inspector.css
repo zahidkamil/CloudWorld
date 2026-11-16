@@ -1,0 +1,111 @@
+.graph-inspector {
+  position: absolute;
+  z-index: 9;
+  top: 84px;
+  right: 14px;
+  bottom: 14px;
+  width: min(340px, calc(100% - 28px));
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(10, 14, 26, 0.82);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  font-size: 0.88rem;
+}
+.graph-inspector h3,
+.graph-inspector h4,
+.graph-inspector p {
+  margin: 0;
+}
+.graph-inspector header {
+  display: grid;
+  gap: 4px;
+}
+.graph-inspector header span,
+.inspector-dim,
+.graph-inspector li span {
+  color: var(--text-dim);
+}
+.graph-inspector__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.inspector-button {
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel-raised);
+  font-weight: 600;
+}
+.inspector-button.is-primary {
+  background: var(--accent-strong);
+  color: white;
+  border-color: transparent;
+}
+.inspector-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #a5b4fc;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.graph-inspector ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 3px;
+}
+.graph-inspector li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.inspector-tree summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px 0;
+}
+.inspector-section {
+  margin-left: 10px;
+}
+.inspector-section summary {
+  font-weight: 600;
+}
+.inspector-card {
+  display: grid;
+  gap: 10px;
+}
+.inspector-card dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin: 0;
+}
+.inspector-card dt {
+  color: var(--text-dim);
+}
+.inspector-card dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.inspector-attr {
+  display: contents;
+}
+.inspector-card code,
+.graph-inspector code {
+  font-size: 0.78rem;
+}
+@media (max-width: 640px) {
+  .graph-inspector {
+    top: auto;
+    max-height: 45vh;
+  }
+}

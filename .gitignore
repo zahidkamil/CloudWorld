@@ -34,3 +34,9 @@ blender/work/
 .idea/
 *.log
 npm-debug.log*
+
+# Terraform working files (sample configuration)
+.terraform/
+*.tfstate
+*.tfstate.*
+tfplan

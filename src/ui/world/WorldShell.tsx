@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo } from 'react';
 import { useSession } from '@/app/store';
 import { detectWebGL } from '@/engine/render/webgl';
 import { BUILT_IN_WORLDS } from '@/ui/landing/worlds';
+import { GraphInspector } from './GraphInspector';
 import './world-shell.css';
 
 const WorldStage = lazy(() => import('./WorldStage'));
@@ -60,6 +61,7 @@ export function WorldShell() {
           </div>
         )}
       </main>
+      <GraphInspector />
     </div>
   );
 }

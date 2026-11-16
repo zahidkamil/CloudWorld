@@ -2,21 +2,21 @@
 
 Source of truth for task status. Detailed subtasks live in `.kiro/specs/*/tasks.md`.
 
-| #   | Task                                                         | Status         |
-| --- | ------------------------------------------------------------ | -------------- |
-| 1   | Executable project and Kiro source of truth                  | ✅ Done        |
-| 2   | Terraform ingestion, topology resolution, graph inspector    | 🚧 In progress |
-| 3   | Multi-region 3D vertical slice and early Pages build         | —              |
-| 4   | Expanded AWS registry, legend, shared highlighting           | —              |
-| 5   | World library system and Modern City (Blender MCP models)    | —              |
-| 6   | Haunted World library (Blender MCP models)                   | —              |
-| 7   | Game interface and synchronized navigation                   | —              |
-| 8   | Region/AZ variation and saved themes                         | —              |
-| 9   | Defender rules                                               | —              |
-| 10  | Guided Defender mission and Explorer polish                  | —              |
-| 11  | Aqua world, built with the `create-world` Kiro Workflow      | —              |
-| 12  | Production validation, docs, deployment                      | —              |
-| 13  | Create World with an LLM key (DEFERRED, likely out of scope) | —              |
+| #   | Task                                                         | Status  |
+| --- | ------------------------------------------------------------ | ------- |
+| 1   | Executable project and Kiro source of truth                  | ✅ Done |
+| 2   | Terraform ingestion, topology resolution, graph inspector    | ✅ Done |
+| 3   | Multi-region 3D vertical slice and early Pages build         | —       |
+| 4   | Expanded AWS registry, legend, shared highlighting           | —       |
+| 5   | World library system and Modern City (Blender MCP models)    | —       |
+| 6   | Haunted World library (Blender MCP models)                   | —       |
+| 7   | Game interface and synchronized navigation                   | —       |
+| 8   | Region/AZ variation and saved themes                         | —       |
+| 9   | Defender rules                                               | —       |
+| 10  | Guided Defender mission and Explorer polish                  | —       |
+| 11  | Aqua world, built with the `create-world` Kiro Workflow      | —       |
+| 12  | Production validation, docs, deployment                      | —       |
+| 13  | Create World with an LLM key (DEFERRED, likely out of scope) | —       |
 
 World instruction sets (`worlds/modern-city`, `haunted-world`, `aqua-world`), the `create-cloudworld-world` Skill,
 the `world-builder` agent and the `create-world` Kiro Workflow are written. Models are still `planned`; they are built in Tasks 5, 6 and 11.
