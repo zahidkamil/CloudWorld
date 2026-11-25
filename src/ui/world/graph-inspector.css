@@ -18,10 +18,15 @@
   flex: 1;
   min-width: 0;
   overflow: auto;
+  overflow-x: hidden;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: 10px;
   padding: 12px 12px 12px 6px;
+}
+.graph-inspector__body > * {
+  min-width: 0;
 }
 .inspector-resize {
   flex: none;
@@ -128,8 +133,11 @@
 }
 .graph-inspector li {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px;
+  gap: 2px 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .inspector-tree summary {
   cursor: pointer;
@@ -196,4 +204,8 @@
 .inspector-row__name {
   color: #a5b4fc;
   font-weight: 600;
+}
+
+.graph-inspector code {
+  overflow-wrap: anywhere;
 }

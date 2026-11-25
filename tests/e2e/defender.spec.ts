@@ -1,17 +1,11 @@
 import { expect, test } from '@playwright/test';
-import { enterWorld } from './helpers';
+import { enterWorld, loadSample } from './helpers';
 
 test.describe('Attack Path mission', () => {
   test('finds the open SSH port, spends a hint, and catches it for points', async ({ page }) => {
     await enterWorld(page, 'Modern City', 'Attack Path');
     const panel = page.getByLabel('Attack path mission');
-    await expect(panel).toContainText('No cloud to defend yet');
-
-    await page
-      .getByLabel('Infrastructure')
-      .getByRole('button', { name: /multi-region sample/i })
-      .click();
-    await expect(panel.getByLabel('1 of 1 findings caught')).toHaveCount(0);
+    // The multi-region sample opens by default.
     await expect(panel.getByLabel('0 of 1 findings caught')).toBeVisible();
 
     await panel.getByRole('button', { name: /SSH is open to the internet/ }).click();
@@ -34,10 +28,7 @@ test.describe('Attack Path mission', () => {
 
   test('shows "No findings" for a clean cloud', async ({ page }) => {
     await enterWorld(page, 'Haunted World', 'Attack Path');
-    await page
-      .getByLabel('Infrastructure')
-      .getByRole('button', { name: /single-az sample/i })
-      .click();
+    await loadSample(page, /Single-AZ sample/);
     const panel = page.getByLabel('Attack path mission');
     await expect(panel.getByText('No findings')).toBeVisible();
     await expect(panel.getByLabel('0 of 0 findings caught')).toBeVisible();

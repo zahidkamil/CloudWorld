@@ -114,3 +114,51 @@
   display: block;
   touch-action: none;
 }
+
+.world-hint {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(10, 14, 26, 0.7);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+
+.scene-label {
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+.scene-label--island {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(10, 14, 26, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+.scene-label--district {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(10, 14, 26, 0.55);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .world-hint {
+    display: none;
+  }
+}

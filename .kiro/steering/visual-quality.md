@@ -29,7 +29,8 @@ Look at the reference image before building or judging any visual work.
 - Ground is never a flat empty plane: roads, paving, lots, edges, props.
 - Highlights: selected = bright outline + beacon; dependency = strong glow; peers = softer glow;
   others dim to about 35% but stay readable.
-- Text in the 3D scene is minimal; prefer DOM labels.
+- Text in the 3D scene is minimal; prefer DOM labels. Every landmark must still reveal `Type (name)` on hover, and selected landmarks keep a readable label.
+- Final library work must replace all procedural placeholder shapes. Modern City and Haunted World may share graph semantics only: never landmark geometry, material sets, environmental props, or layout structure. Haunted World must read as dark indigo/blue stone with bright orange lantern and window pools plus teal spectral contrast, not as a city recolour.
 - Motion is restrained (traffic, flicker, fog drift) and respects reduced motion.
 - Models are original. Use references for style only, never copy artwork.
 

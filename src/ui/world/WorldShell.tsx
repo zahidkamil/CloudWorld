@@ -1,9 +1,13 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useEffect, useMemo, type CSSProperties } from 'react';
+import { useSelection } from '@/app/selection';
 import { useSession } from '@/app/store';
+import { importPlan } from '@/engine/graph/importPlan';
 import { detectWebGL } from '@/engine/render/webgl';
+import { BUNDLED_SAMPLES } from '@/samples';
 import { BUILT_IN_WORLDS } from '@/themes/worlds';
 import { DefenderPanel } from '@/apps/defender/DefenderPanel';
 import { GraphInspector } from './GraphInspector';
+import { usePanelLayout } from './panelLayout';
 import './world-shell.css';
 
 const WorldStage = lazy(() => import('./WorldStage'));
@@ -12,12 +16,38 @@ const WorldStage = lazy(() => import('./WorldStage'));
  * In-world HUD frame. The 3D renderer, legend, and inspector are mounted here in later tasks.
  */
 export function WorldShell() {
-  const { mode, themeId, setMode, setTheme, returnToMenu } = useSession();
+  const { mode, themeId, graph, setGraph, setMode, setTheme, returnToMenu } = useSession();
+  const fit = useSelection((s) => s.fit);
+  const inspectorWidth = usePanelLayout((s) => s.inspectorWidth);
+  const setMissionPanelOpen = usePanelLayout((s) => s.setMissionPanelOpen);
+  useEffect(() => {
+    setMissionPanelOpen(mode === 'defender');
+  }, [mode, setMissionPanelOpen]);
   const world = BUILT_IN_WORLDS.find((w) => w.id === themeId);
   const webgl = useMemo(() => detectWebGL(), []);
 
+  // The game is playable straight away: with no plan loaded, the bundled sample opens.
+  const hasGraph = graph !== null;
+  useEffect(() => {
+    if (hasGraph) return;
+    const sample = BUNDLED_SAMPLES[0];
+    if (!sample) return;
+    let cancelled = false;
+    void sample.load().then((text) => {
+      const result = importPlan(text);
+      if (!cancelled && result.ok && useSession.getState().graph === null) setGraph(result.graph);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [hasGraph, setGraph]);
+
   return (
-    <div className="world-shell" data-theme={themeId}>
+    <div
+      className={`world-shell${mode === 'defender' ? ' has-mission-panel' : ''}`}
+      data-theme={themeId}
+      style={{ '--inspector-width': `${inspectorWidth}px` } as CSSProperties}
+    >
       <header className="hud-bar">
         <button type="button" className="hud-button" onClick={returnToMenu}>
           ← Menu
@@ -39,6 +69,9 @@ export function WorldShell() {
             </button>
           ))}
         </div>
+        <button type="button" className="hud-button" onClick={fit} title="Frame the whole world">
+          Fit view
+        </button>
         <label className="hud-select">
           <span className="visually-hidden">Theme</span>
           <select value={themeId} onChange={(e) => setTheme(e.target.value)} aria-label="Theme">
@@ -62,6 +95,9 @@ export function WorldShell() {
           </div>
         )}
       </main>
+      <p className="world-hint" aria-hidden="true">
+        Drag to orbit · Right-drag to pan · Scroll to zoom · Click a building to inspect it
+      </p>
       {mode === 'defender' && <DefenderPanel />}
       <GraphInspector />
     </div>

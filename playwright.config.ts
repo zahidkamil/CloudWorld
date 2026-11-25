@@ -10,7 +10,8 @@ export default defineConfig({
   fullyParallel: !isCI,
   forbidOnly: isCI,
   retries: isCI ? 1 : 0,
-  workers: isCI ? 1 : undefined,
+  // Software WebGL is heavy: too many parallel browsers starve each other of frames and make tests slow.
+  workers: isCI ? 1 : 2,
   globalTimeout: 15 * 60 * 1000,
   timeout: 60_000,
   reporter: isCI ? [['github'], ['html', { open: 'never' }]] : [['list']],

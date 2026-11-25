@@ -1,10 +1,17 @@
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, PerformanceMonitor } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useRef, type ReactNode, type RefObject } from 'react';
+import { useRef, useState, type ReactNode, type RefObject } from 'react';
+import { MathUtils } from 'three';
 
 interface WorldCanvasProps {
   themeId: string;
   background: string;
+  /** Furthest the camera may zoom out. */
+  maxDistance: number;
+  /** Extra data-* attributes on the wrapper, for tests and styling (for example data-selected). */
+  dataAttrs?: Record<string, string>;
+  /** A click on empty space. */
+  onMissed?: () => void;
   children?: ReactNode;
 }
 
@@ -28,8 +35,17 @@ function RenderProbe({ target }: { target: RefObject<HTMLDivElement | null> }) {
   return null;
 }
 
-export function WorldCanvas({ themeId, background, children }: WorldCanvasProps) {
+export function WorldCanvas({
+  themeId,
+  background,
+  maxDistance,
+  dataAttrs,
+  onMissed,
+  children,
+}: WorldCanvasProps) {
   const wrapper = useRef<HTMLDivElement>(null);
+  // Automated browsers render in software, so start at 1x there. Real players start at 1.5x and adapt.
+  const [dpr, setDpr] = useState(() => (typeof navigator !== 'undefined' && navigator.webdriver ? 1 : 1.5));
   return (
     <div
       ref={wrapper}
@@ -37,23 +53,33 @@ export function WorldCanvas({ themeId, background, children }: WorldCanvasProps)
       data-testid="world-canvas"
       data-theme={themeId}
       data-ready="false"
+      {...dataAttrs}
     >
       <Canvas
         shadows
-        dpr={[1, 2]}
-        camera={{ position: [18, 16, 18], fov: 35, near: 0.1, far: 500 }}
+        dpr={dpr}
+        camera={{ position: [30, 24, 30], fov: 35, near: 0.1, far: 800 }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
+        onPointerMissed={onMissed}
       >
+        <PerformanceMonitor
+          onDecline={() => setDpr((d) => MathUtils.clamp(d - 0.25, 1, 2))}
+          onIncline={() => setDpr((d) => MathUtils.clamp(d + 0.25, 1, 2))}
+          flipflops={3}
+          onFallback={() => setDpr(1)}
+        />
         <color attach="background" args={[background]} />
         <RenderProbe target={wrapper} />
         {children}
         <OrbitControls
           makeDefault
           enableDamping
-          maxPolarAngle={Math.PI / 2.4}
-          minDistance={8}
-          maxDistance={80}
-          target={[0, 0, 0]}
+          dampingFactor={0.12}
+          minPolarAngle={MathUtils.degToRad(12)}
+          maxPolarAngle={MathUtils.degToRad(80)}
+          minDistance={7}
+          maxDistance={maxDistance}
+          screenSpacePanning={false}
         />
       </Canvas>
     </div>

@@ -1,16 +1,18 @@
-import { expect, test, type Page } from '@playwright/test';
-import { enterWorld } from './helpers';
-
-async function openWorldWithSample(page: Page, buttonName: RegExp) {
-  await enterWorld(page, 'Modern City');
-  const inspector = page.getByLabel('Infrastructure');
-  await inspector.getByRole('button', { name: buttonName }).click();
-  return inspector;
-}
+import { expect, test } from '@playwright/test';
+import { enterWorld, loadSample } from './helpers';
 
 test.describe('Infrastructure panel', () => {
+  test('opens with the multi-region sample already loaded', async ({ page }) => {
+    await enterWorld(page, 'Modern City');
+    const inspector = page.getByLabel('Infrastructure');
+    await expect(inspector).toContainText('60 resources');
+    await expect(inspector).toContainText('2 regions');
+  });
+
   test('groups resources by AWS type, then by location', async ({ page }) => {
-    const inspector = await openWorldWithSample(page, /Load single-az sample/i);
+    await enterWorld(page, 'Modern City');
+    await loadSample(page, /Single-AZ sample/);
+    const inspector = page.getByLabel('Infrastructure');
     await expect(inspector).toContainText('1 region');
 
     await inspector.getByRole('button', { name: 'Expand all' }).click();
@@ -27,14 +29,9 @@ test.describe('Infrastructure panel', () => {
     await expect(inspector.getByText('us-east-1a').first()).toBeVisible();
   });
 
-  test('the multi-region sample still loads from the panel', async ({ page }) => {
-    const inspector = await openWorldWithSample(page, /Load multi-region sample/i);
-    await expect(inspector).toContainText('60 resources');
-    await expect(inspector).toContainText('2 regions');
-  });
-
   test('the panel can be widened by dragging and with the keyboard', async ({ page }) => {
-    const inspector = await openWorldWithSample(page, /Load single-az sample/i);
+    await enterWorld(page, 'Modern City');
+    const inspector = page.getByLabel('Infrastructure');
     const handle = page.getByRole('separator', { name: 'Resize side panel' });
     const before = (await inspector.boundingBox())!.width;
 

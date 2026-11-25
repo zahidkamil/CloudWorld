@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { useDefender } from '@/apps/defender/defenderStore';
+import { useSelection } from './selection';
 import type { InfrastructureGraph } from '@/engine/graph/types';
 import { loadSettings, saveSettings, type Settings } from './settings';
 
@@ -40,6 +41,7 @@ export const useSession = create<SessionState>((set, get) => ({
   importOpen: false,
   setGraph: (graph) => {
     useDefender.getState().reset();
+    useSelection.getState().clear();
     set({ graph, importOpen: false });
   },
   openImport: () => set({ importOpen: true }),

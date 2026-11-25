@@ -7,6 +7,7 @@
   - _Requirements: R1.1–R1.3, R1.6_
 
 - [ ] 3. Theme contract
+  - [x] 3.0 Early slice: `src/themes/variation.ts` (region accents at least 60 degrees apart, AZ tint within 6% lightness), interim palettes per world in `WorldStage`
   - [ ] 3.1 ThemeDescriptor and library.json Zod schemas, `resolve()` with fallbacks (tests)
   - [ ] 3.2 Region palette and AZ variant derivation (tests)
   - _Requirements: R1.4, R3.2, R4_
@@ -14,13 +15,13 @@
 - [ ] 5. Modern City library
   - [ ] 5.1 Library loader, instancing, procedural fallbacks, shared kit pieces (roads, trees, lamps, vehicles)
   - [ ] 5.2 Blender MCP: build structure, family, and key-service models from `worlds/modern-city/resources.md`; export GLBs
-  - [ ] 5.3 `library.json`, day and night presets, screenshot review against `docs/images/City-Theme.jpeg`
+  - [ ] 5.3 `library.json`, day and night presets, screenshot review against `docs/images/City-Theme.jpeg`; replace every procedural City silhouette with the City library models
   - _Requirements: R1, R2.1, R2.3, R2.4_
 
 - [ ] 6. Haunted World library
   - [ ] 6.1 Blender MCP: build models from `worlds/haunted-world/resources.md`; export GLBs
-  - [ ] 6.2 `library.json`, fog, ghost light, bloom; screenshot review against `docs/images/Haunted-Theme.jpeg`
-  - [ ] 6.3 Theme independence tests (graph, selection, findings unchanged) and a distinctness test (no shared model files between worlds)
+  - [ ] 6.2 `library.json`, dark indigo sky, high-contrast blue slate, orange lantern/candle pools, teal ghost light, fog and selective bloom; screenshot review against `docs/images/Haunted-Theme.jpeg`; replace every procedural Haunted silhouette with the Haunted library models
+  - [ ] 6.3 Theme independence tests (graph, selection, findings unchanged) and a distinctness test (no shared model files, geometry, materials, or layout structure between worlds)
   - _Requirements: R2.2, R2.3, R3_
 
 - [ ] 8. Saved themes

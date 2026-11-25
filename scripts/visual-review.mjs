@@ -89,10 +89,6 @@ async function reviewWorld(browser, baseUrl, world) {
     .getByRole('dialog')
     .getByRole('button', { name: /Start Showcase/ })
     .click();
-  await page
-    .getByLabel('Infrastructure')
-    .getByRole('button', { name: /multi-region sample/i })
-    .click();
 
   const canvas = page.getByTestId('world-canvas');
   await canvas.waitFor({ state: 'visible', timeout: 30_000 });
@@ -102,6 +98,13 @@ async function reviewWorld(browser, baseUrl, world) {
     undefined,
     { timeout: 30_000 },
   );
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-testid="world-canvas"]')?.getAttribute('data-camera-settled') === 'true',
+    undefined,
+    { timeout: 30_000 },
+  );
+  check('landmarks drawn for every resource', (await canvas.getAttribute('data-landmarks')) === '60');
   check('WebGL 2 frames drawn', (await canvas.getAttribute('data-webgl')) === '2');
   check('draw calls reported', Number(await canvas.getAttribute('data-draw-calls')) > 0);
 
@@ -116,18 +119,41 @@ async function reviewWorld(browser, baseUrl, world) {
     lighting.join('; ') || `mean ${stats.meanLuma.toFixed(2)}, contrast ${stats.contrast.toFixed(2)}`,
   );
 
-  // Resource selection: open the first resource in the panel and read its details.
+  // Resource selection: focus a resource from the panel, then pick it again by clicking it in the 3D scene.
   const panel = page.getByLabel('Infrastructure');
   await panel.getByRole('button', { name: 'Expand all' }).click();
-  const first = panel.locator('summary + ul button.inspector-link').first();
-  const name = ((await first.textContent()) ?? '').trim();
-  await first.click();
+  await panel.getByRole('button', { name: 'web-east-0', exact: true }).first().click();
+  await page.waitForFunction(
+    () =>
+      document.querySelector('[data-testid="world-canvas"]')?.getAttribute('data-camera-settled') === 'true',
+    undefined,
+    { timeout: 30_000 },
+  );
   const details = page.getByLabel('Resource details');
+  check('selection opens the details card', await details.isVisible());
+  const highlights = (await canvas.getAttribute('data-highlights')) ?? '';
   check(
-    'resource selection opens details',
-    (await details.isVisible()) && (await details.textContent())?.includes(name),
+    'selection highlights, shares peers, and dims the rest',
+    /primary:1/.test(highlights) && /peer:/.test(highlights) && /dim:/.test(highlights),
+    highlights,
   );
   await page.screenshot({ path: `.screenshots/review/${world.id}-selected.png` });
+
+  await page.getByRole('button', { name: /All resources/ }).click();
+  const box = await canvas.boundingBox();
+  const panelBox = await panel.boundingBox();
+  const cx = (box.x + panelBox.x - 14) / 2;
+  const cy = box.y + box.height / 2;
+  await page.mouse.move(cx, cy);
+  check(
+    'hovering the focused landmark in the scene',
+    (await canvas.getAttribute('data-hovered')) === 'aws_instance.web_east[0]',
+  );
+  await page.mouse.click(cx, cy);
+  check(
+    'clicking the landmark in the scene selects it',
+    (await canvas.getAttribute('data-selected')) === 'aws_instance.web_east[0]',
+  );
 
   check('no console or page errors', errors.length === 0, errors.slice(0, 3).join(' | '));
   await context.close();

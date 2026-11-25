@@ -21,6 +21,7 @@
   - [ ] 4.1 Collapsible category -> type -> instance tree with counts
   - [ ] 4.1b Full-row hover and focus highlight on every resource row, synced with world hover (shared hoveredId)
   - [ ] 4.2 Type highlight, instance focus, hover preview, reverse sync from world selection
+  - [ ] 4.3 Resource nameplates: hover tooltip, selected persistent label, and toggleable all-resource label layer (`Type (name)`)
   - _Requirements: R3_
 
 - [ ] 7. Game interface polish

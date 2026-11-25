@@ -6,8 +6,8 @@
   - _Requirements: R1.1, R1.2, R2.3, R4.1_
 
 - [ ] 3. Early deployment
-  - [ ] 3.1 `ci.yml` with quality, e2e, security, and CodeQL jobs
-  - [ ] 3.2 `deploy.yml` reusing CI, building and deploying the Pages artifact
+  - [x] 3.1 `ci.yml` with quality, e2e (Chromium, Firefox, WebKit), security, and CodeQL jobs
+  - [x] 3.2 `deploy.yml` reusing CI, building and deploying the Pages artifact, then smoke testing the live URL
   - [ ] 3.3 Owner enables Pages (Source: GitHub Actions); first deploy after approval
   - _Requirements: R2, R3.1, R3.2, R5_
 

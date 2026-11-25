@@ -16,10 +16,10 @@ Task numbers map to the global sequence in `docs/PROGRESS.md`.
   - [x] 2.6 Import flow: sample / upload / paste, preview, confirm, failure recovery, temporary inspector
   - _Requirements: R1, R2.1, R3_
 
-- [ ] 3. Multi-region 3D vertical slice
-  - [ ] 3.1 Deterministic layout for global hub, region islands, AZ districts (tests)
-  - [ ] 3.2 Shared R3F scene, isometric camera, controls, hover, select, click-to-focus
-  - [ ] 3.3 Inspector panel
+- [x] 3. Multi-region 3D vertical slice
+  - [x] 3.1 Deterministic layout for global hub, region islands, AZ districts (`src/engine/layout`, tests)
+  - [x] 3.2 Shared R3F scene: landmarks by silhouette family, instanced rim props, isometric orbit camera, hover, click, click-to-focus, selection beacon, dependency lines, peer highlight, dimming
+  - [x] 3.3 Inspector card driven by the shared selection store
   - [ ] 3.4 Relationship arcs: dotted parabolic arcs from the selected resource to dependencies and consumers (capped, theme-colored, reduced-motion safe) with a test on arc endpoints
   - _Requirements: R3, R4.1, R5.1, R5.2_
 

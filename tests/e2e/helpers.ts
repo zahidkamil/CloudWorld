@@ -21,3 +21,11 @@ export async function enterWorld(
     .click();
   await expect(page.getByRole('button', { name: /Menu/ })).toBeVisible();
 }
+
+/** Opens the import dialog from the world screen, previews a bundled sample, and loads it. */
+export async function loadSample(page: Page, name: RegExp) {
+  await page.getByLabel('Infrastructure').getByRole('button', { name: 'Import plan' }).click();
+  await page.getByRole('dialog').getByRole('button', { name }).click();
+  await page.getByRole('button', { name: 'Load world' }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+}

@@ -1,10 +1,12 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
+import { useSelection } from '@/app/selection';
 import { useSession } from '@/app/store';
 import { BUNDLED_SAMPLES } from '@/samples';
 import { importPlan } from '@/engine/graph/importPlan';
 import { relationshipsOf, type Relation } from '@/engine/graph/relations';
 import type { CloudResource, InfrastructureGraph } from '@/engine/graph/types';
 import { groupByType } from '@/engine/graph/typeGroups';
+import { usePanelLayout } from './panelLayout';
 import { PANEL_MIN_WIDTH, useResizableWidth } from './useResizableWidth';
 import './graph-inspector.css';
 
@@ -78,10 +80,14 @@ export function GraphInspector() {
   const graph = useSession((s) => s.graph);
   const setGraph = useSession((s) => s.setGraph);
   const openImport = useSession((s) => s.openImport);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedId = useSelection((s) => s.selectedId);
+  const select = useSelection((s) => s.select);
+  const focusOn = useSelection((s) => s.focusOn);
   const [view, setView] = useState<ViewMode>('type');
   const [openMode, setOpenMode] = useState<{ mode: OpenMode; n: number }>({ mode: 'default', n: 0 });
   const { width, max, handleProps } = useResizableWidth('cloudworld.inspectorWidth');
+  const setInspectorWidth = usePanelLayout((s) => s.setInspectorWidth);
+  useEffect(() => setInspectorWidth(width), [width, setInspectorWidth]);
   const locationTree = useMemo(() => (graph ? groupByLocation(graph) : []), [graph]);
   const typeTree = useMemo(() => (graph ? groupByType(graph) : []), [graph]);
   const selected = graph?.resources.find((r) => r.id === selectedId);
@@ -96,7 +102,6 @@ export function GraphInspector() {
     const result = importPlan(await sample.load());
     if (result.ok) {
       setGraph(result.graph);
-      setSelectedId(null);
     }
   };
 
@@ -170,7 +175,7 @@ export function GraphInspector() {
 
         {selected && rel ? (
           <article className="inspector-card" aria-label="Resource details">
-            <button type="button" className="inspector-link" onClick={() => setSelectedId(null)}>
+            <button type="button" className="inspector-link" onClick={() => select(null)}>
               ← All resources
             </button>
             <h4>{selected.name}</h4>
@@ -202,8 +207,8 @@ export function GraphInspector() {
                 </div>
               ))}
             </dl>
-            <Links title="Depends on" relations={rel.dependsOn} onSelect={setSelectedId} />
-            <Links title="Used by" relations={rel.usedBy} onSelect={setSelectedId} />
+            <Links title="Depends on" relations={rel.dependsOn} onSelect={focusOn} />
+            <Links title="Used by" relations={rel.usedBy} onSelect={focusOn} />
             {rel.variables.length > 0 && (
               <section>
                 <h4>Variables</h4>
@@ -265,11 +270,7 @@ export function GraphInspector() {
                         <ul>
                           {t.resources.map((r) => (
                             <li key={r.id}>
-                              <button
-                                type="button"
-                                className="inspector-link"
-                                onClick={() => setSelectedId(r.id)}
-                              >
+                              <button type="button" className="inspector-link" onClick={() => focusOn(r.id)}>
                                 {r.name}
                               </button>
                               <span>{shortLocation(r)}</span>
@@ -298,11 +299,7 @@ export function GraphInspector() {
                         <ul>
                           {section.items.map((r) => (
                             <li key={r.id}>
-                              <button
-                                type="button"
-                                className="inspector-link"
-                                onClick={() => setSelectedId(r.id)}
-                              >
+                              <button type="button" className="inspector-link" onClick={() => focusOn(r.id)}>
                                 {r.name}
                               </button>
                               <span>{r.label}</span>

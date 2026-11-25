@@ -27,11 +27,12 @@ The interface should feel like a game, not a developer dashboard.
 ## R3 Resource legend
 
 - R3.6 Every legend and inspector resource row SHALL highlight across its full width on hover and keyboard focus. Hovering a row SHALL highlight the resource in the world, and hovering a resource in the world SHALL highlight its row.
-- R3.5 The side panel SHALL be resizable by dragging its edge (and with the keyboard), within 300 px and 80% of the viewport, and SHALL remember its width.
+- R3.6 The side panel SHALL be resizable by dragging its edge (and with the keyboard), within 300 px and 80% of the viewport, and SHALL remember its width.
 - R3.1 A collapsible side legend SHALL group resources as category -> resource type (with count) -> instance.
 - R3.2 Clicking a resource type SHALL highlight all its instances in the world.
 - R3.3 Clicking an instance SHALL select it, focus the camera on it, and highlight dependencies and shared peers.
 - R3.4 Hovering legend entries SHALL preview highlights; selecting in the world SHALL expand and scroll the legend to that entry.
+- R3.5 Every resource SHALL expose a readable nameplate in the world in the form `<resource type> (<resource name>)`. The selected resource nameplate is always visible. Non-selected nameplates are shown in the legend/minimap or a toggleable label layer so large plans remain navigable. Hovering a landmark SHALL show its full nameplate and resource type.
 
 ## R4 Inspector
 
