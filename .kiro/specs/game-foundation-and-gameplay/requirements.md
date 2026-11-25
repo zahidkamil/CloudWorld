@@ -35,6 +35,7 @@ that I can see my own AWS infrastructure without credentials or a backend.
 - R4.1 WHEN a resource is selected THEN it SHALL be outlined and focused, and its direct dependencies highlighted.
 - R4.2 WHEN a resource is selected THEN resources sharing a security group, subnet, IAM role, target group, KMS key, or Terraform variable reference SHALL be highlighted as peers.
 - R4.3 Unrelated resources SHALL dim but remain visible.
+- R4.5 WHEN a resource is selected THEN the world SHALL draw dotted, animated arcs from it to its direct dependencies and to the resources that use it, with arrow-free direction shown by dash flow. Arcs SHALL be hidden for unrelated resources, recolored per world, and capped (e.g. 40) with a "+N more" label.
 - R4.4 Terraform variables SHALL NOT change relationships or security findings.
 
 ## R5 Explorer

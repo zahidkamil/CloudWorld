@@ -1,20 +1,83 @@
 .graph-inspector {
+  --inspector-width: 340px;
   position: absolute;
   z-index: 9;
   top: 84px;
   right: 14px;
   bottom: 14px;
-  width: min(340px, calc(100% - 28px));
-  overflow: auto;
-  display: grid;
-  align-content: start;
-  gap: 10px;
-  padding: 12px;
+  width: var(--inspector-width);
+  max-width: calc(100% - 28px);
+  display: flex;
   border-radius: 14px;
   background: rgba(10, 14, 26, 0.82);
   border: 1px solid var(--line);
   backdrop-filter: blur(12px);
   font-size: 0.88rem;
+}
+.graph-inspector__body {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 12px 12px 12px 6px;
+}
+.inspector-resize {
+  flex: none;
+  width: 14px;
+  cursor: col-resize;
+  touch-action: none;
+  position: relative;
+  border-radius: 14px 0 0 14px;
+}
+.inspector-resize::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  width: 4px;
+  height: 44px;
+  margin-top: -22px;
+  border-radius: 2px;
+  background: var(--text-dim);
+  opacity: 0.45;
+}
+.inspector-resize:hover::after,
+.inspector-resize:focus-visible::after {
+  opacity: 1;
+  background: var(--teal);
+}
+.inspector-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+.inspector-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(30, 41, 59, 0.8);
+}
+.inspector-toggle button {
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.inspector-toggle button:hover {
+  background: rgba(148, 163, 184, 0.15);
+}
+.inspector-toggle button.is-active {
+  background: var(--accent-strong);
+  color: white;
+}
+.inspector-category > summary {
+  font-size: 0.95rem;
 }
 .graph-inspector h3,
 .graph-inspector h4,
@@ -106,6 +169,31 @@
 @media (max-width: 640px) {
   .graph-inspector {
     top: auto;
+    width: auto;
+    left: 14px;
     max-height: 45vh;
   }
+  .inspector-resize {
+    display: none;
+  }
+}
+
+.inspector-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+}
+.inspector-row:hover,
+.inspector-row:focus-visible {
+  background: rgba(129, 140, 248, 0.22);
+}
+.inspector-row__name {
+  color: #a5b4fc;
+  font-weight: 600;
 }

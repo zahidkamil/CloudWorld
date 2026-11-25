@@ -15,15 +15,25 @@ Read `worlds/README.md` for the folder layout and the entry format. Existing exa
 
 ## Running it as a Kiro Workflow
 
-The recipe `.kiro/workflows/create-world.workflow.json` runs this skill in background steps using the
-`world-builder` agent (`.kiro/agents/world-builder.md`). Enable Workflows first (Workspace Configuration,
-then Workflows), then ask Kiro to run `create-world` or type `/workflow-run`. Inputs: `worldId`,
-`worldName`, `referenceImage` (a file name in `docs/images/`, or `none`), and `brief`. The run pauses after
-the resource list so the user can adjust it. You can also follow the same steps by hand with `/create-cloudworld-world`.
+The recipe `.kiro/workflows/create-world.workflow.json` runs this skill in background steps with the `world-builder` agent
+(`.kiro/agents/world-builder.md`). Enable Workflows first (Workspace Configuration, then Workflows), then ask Kiro to run
+`create-world` or type `/workflow-run`.
+
+Inputs are just two:
+
+- `description`: one or many sentences describing the world, for example "A cozy mushroom village under giant glowing toadstools,
+  with lantern-lit paths and a misty forest floor."
+- `referenceImage`: a file name inside `docs/images/`, or `none`. An image is optional.
+
+The first step deduces the world name and id from the description (a name in the description wins), writes the instruction set, and
+pauses so the user can review `worlds/<id>/resources.md`. The next steps build models, integrate the world, then run the inspection
+hooks (`.kiro/hooks/visual-review-playwright.json`, `.kiro/hooks/blender-model-review.json`, and the save-time checks), and finally
+run the full test suite. You can also follow the same steps by hand with `/create-cloudworld-world`.
 
 ## Inputs to collect first
 
-1. **World id and name**, kebab-case id (for example `aqua-world`).
+1. **World id and name.** When the user only gives a description, deduce them: 1 to 3 words in Title Case for the name, kebab-case
+   for the id, not already used under `worlds/` or `public/worlds/`. A name in the description wins.
 2. **Style source.** Either:
    - **A reference image** in `docs/images/` (optional). Write its exact file name, for example
      `docs/images/Aqua-Theme.png`, under `reference_images` in `world.md`. The validator fails if a listed file
@@ -49,7 +59,7 @@ the resource list so the user can adjust it. You can also follow the same steps 
    - Let the user adjust the list before building models. This list is where users say how each AWS
      resource should look in their world.
 4. **Validate the text.** Run `npm run validate:worlds`. Fix every error.
-5. **Check Blender.** Call `blender/get_scene_info` (always allowed). Then `get_addon_status` and
+5. **Check Blender.** The save hook `validate-glb-on-save` and the `blender-model-review` hook describe the checks. Call `blender/get_scene_info` (always allowed). Then `get_addon_status` and
    `execute_blender_code` need approval under the current permissions. Ask once for exactly what is needed.
    Never edit `permissions.yaml` or broaden permissions.
 6. **Build models with the Blender MCP.** Save reusable scripts in `worlds/<id>/blender/`. For each entry
@@ -64,7 +74,8 @@ the resource list so the user can adjust it. You can also follow the same steps 
      the world is `in-progress`; the renderer falls back to a procedural shape.
 7. **Write `public/worlds/<id>/library.json`.** Maps each key to `{ file, scale, yOffset }` and holds the
    palette, lighting, fog, camera, and prop settings from `world.md`. Keep values in sync with the doc.
-8. **Register the world** in the world list (`src/themes/builtins.ts`), with its card name and tagline.
+8. **Register the world** in `src/themes/worlds.ts` (`ALL_WORLDS`: name, tagline, blurb, accent colour, `available: true`). Its card shows
+   `public/worlds/<id>/preview.webp`.
 9. **Verify in the app.** Run `npm run build`, serve it, and use Playwright (MCP or `scripts/capture.mjs`)
    to capture the sample plan in the new world. Compare with the reference image. Fix and repeat until the
    world looks cohesive. Capture `public/worlds/<id>/preview.webp` from the real scene.

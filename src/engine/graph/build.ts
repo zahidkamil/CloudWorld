@@ -3,7 +3,7 @@ import { resolveTopology } from '@/engine/topology/resolve';
 import { PERFORMANCE_WARNING_RESOURCES, type ParsedPlan, type PlanResource } from '@/engine/terraform/types';
 import { extractEdges } from './edges';
 import { buildGroups } from './groups';
-import type { CloudResource, InfrastructureGraph, RegionInfo } from './types';
+import type { CloudResource, InfrastructureGraph, OpenIngress, RegionInfo } from './types';
 
 function displayName(r: PlanResource): string {
   for (const key of ['tags', 'tags_all']) {
@@ -25,6 +25,28 @@ function safeAttributes(r: PlanResource, allow: readonly string[]): CloudResourc
   return out;
 }
 
+const WORLD_CIDRS = new Set(['0.0.0.0/0', '::/0']);
+
+/** Ingress rules open to the whole internet. Reads only ports, protocol and CIDR ranges, never descriptions or IDs. */
+function openIngressOf(r: PlanResource): OpenIngress[] | undefined {
+  if (r.type !== 'aws_security_group' || !Array.isArray(r.values.ingress)) return undefined;
+  const out: OpenIngress[] = [];
+  for (const rule of r.values.ingress) {
+    if (typeof rule !== 'object' || rule === null) continue;
+    const rec = rule as Record<string, unknown>;
+    const cidrs = [rec.cidr_blocks, rec.ipv6_cidr_blocks].flatMap((v) => (Array.isArray(v) ? v : []));
+    if (!cidrs.some((c) => typeof c === 'string' && WORLD_CIDRS.has(c))) continue;
+    const protocol = typeof rec.protocol === 'string' ? rec.protocol : '-1';
+    const allProtocols = protocol === '-1' || protocol === 'all';
+    const fromPort = allProtocols ? 0 : Number(rec.from_port ?? 0);
+    const toPort = allProtocols ? 65535 : Number(rec.to_port ?? fromPort);
+    if (Number.isFinite(fromPort) && Number.isFinite(toPort)) {
+      out.push({ fromPort, toPort, protocol: allProtocols ? '-1' : protocol });
+    }
+  }
+  return out;
+}
+
 /** Converts a parsed plan to the renderer-independent graph. The parsed plan can then be discarded. */
 export function buildGraph(plan: ParsedPlan): InfrastructureGraph {
   const edges = extractEdges(plan);
@@ -33,6 +55,7 @@ export function buildGraph(plan: ParsedPlan): InfrastructureGraph {
 
   const resources: CloudResource[] = plan.resources.map((r) => {
     const entry = lookupRegistry(r.type);
+    const openIngress = openIngressOf(r);
     return {
       id: r.address,
       type: r.type,
@@ -43,6 +66,7 @@ export function buildGraph(plan: ParsedPlan): InfrastructureGraph {
       category: entry.category,
       placement: placements.get(r.address) ?? { scope: 'unresolved', source: 'no region information' },
       attributes: safeAttributes(r, entry.attributes),
+      ...(openIngress ? { exposure: { openIngress } } : {}),
       action: r.action,
     };
   });

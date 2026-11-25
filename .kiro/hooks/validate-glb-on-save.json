@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate world models on save",
+      "trigger": "PostFileSave",
+      "description": "Checks exported GLB models (size, triangles, materials, no cameras or lights, listed in resources.md) whenever a model or resource list is saved.",
+      "matcher": "public/worlds/.*\\.glb$|worlds/.*/resources\\.md$",
+      "action": {
+        "type": "command",
+        "command": "node scripts/validate-glb.mjs && node scripts/validate-worlds.mjs",
+        "timeout": 60
+      }
+    }
+  ]
+}

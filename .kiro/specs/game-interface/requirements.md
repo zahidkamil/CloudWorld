@@ -3,6 +3,14 @@
 Landing screen, world selection, Create World, in-world HUD, legend, inspector, and import UI.
 The interface should feel like a game, not a developer dashboard.
 
+## R0 Start menu (game feel)
+
+- R0.1 The app SHALL open on a start menu with two choices: World and Settings. Wording SHALL feel like a game (for example choosing a world to play in), not a dashboard.
+- R0.2 Settings SHALL let the player pick a default world and a default mission. Both SHALL be saved on the device, validated when read, and pre-selected on the World screen. A Quick play shortcut SHALL enter the default world and mission.
+- R0.3 World SHALL show every world as a card with a preview, tagline, and a Default badge. Worlds that are not built yet SHALL show as locked, Coming soon.
+- R0.4 Choosing a world SHALL ask for a mission: Showcase (watch the Terraform come alive) or Attack Path (hunt the attack path for points).
+- R0.5 Attack Path SHALL show a score, how many findings are caught out of the total, progressive hints that cost points, and simulated fixes. When there are no findings it SHALL say "No findings".
+
 ## R1 Landing
 
 - R1.1 The landing screen SHALL show the CloudWorld brand, the Explorer/Defender choice, and world cards laid out like `docs/images/Game.png`.
@@ -18,6 +26,8 @@ The interface should feel like a game, not a developer dashboard.
 
 ## R3 Resource legend
 
+- R3.6 Every legend and inspector resource row SHALL highlight across its full width on hover and keyboard focus. Hovering a row SHALL highlight the resource in the world, and hovering a resource in the world SHALL highlight its row.
+- R3.5 The side panel SHALL be resizable by dragging its edge (and with the keyboard), within 300 px and 80% of the viewport, and SHALL remember its width.
 - R3.1 A collapsible side legend SHALL group resources as category -> resource type (with count) -> instance.
 - R3.2 Clicking a resource type SHALL highlight all its instances in the world.
 - R3.3 Clicking an instance SHALL select it, focus the camera on it, and highlight dependencies and shared peers.

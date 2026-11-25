@@ -1,7 +1,8 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { useSession } from '@/app/store';
 import { detectWebGL } from '@/engine/render/webgl';
-import { BUILT_IN_WORLDS } from '@/ui/landing/worlds';
+import { BUILT_IN_WORLDS } from '@/themes/worlds';
+import { DefenderPanel } from '@/apps/defender/DefenderPanel';
 import { GraphInspector } from './GraphInspector';
 import './world-shell.css';
 
@@ -25,7 +26,7 @@ export function WorldShell() {
           <span className="hud-title__brand">CloudWorld</span>
           <span className="hud-title__world">{world?.name ?? 'Custom world'}</span>
         </div>
-        <div className="hud-group" role="group" aria-label="Game mode">
+        <div className="hud-group" role="group" aria-label="Mission">
           {(['explorer', 'defender'] as const).map((m) => (
             <button
               key={m}
@@ -34,7 +35,7 @@ export function WorldShell() {
               aria-pressed={mode === m}
               onClick={() => setMode(m)}
             >
-              {m === 'explorer' ? 'Explorer' : 'Defender'}
+              {m === 'explorer' ? 'Showcase' : 'Attack Path'}
             </button>
           ))}
         </div>
@@ -61,6 +62,7 @@ export function WorldShell() {
           </div>
         )}
       </main>
+      {mode === 'defender' && <DefenderPanel />}
       <GraphInspector />
     </div>
   );

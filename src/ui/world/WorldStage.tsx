@@ -1,12 +1,13 @@
 import { PlaceholderDiorama } from '@/engine/render/PlaceholderDiorama';
 import { WorldCanvas } from '@/engine/render/WorldCanvas';
 
+/** Interim colours that echo each reference image until the Blender libraries replace this scene (Tasks 5 and 6). */
 const PLACEHOLDER_LOOK: Record<
   string,
   { background: string; ground: string; building: string; glow: string }
 > = {
-  'modern-city': { background: '#070b16', ground: '#1b2333', building: '#334155', glow: '#5eead4' },
-  'haunted-world': { background: '#c2410c', ground: '#d6d0c4', building: '#5b4a5e', glow: '#fdba74' },
+  'modern-city': { background: '#bfe6fb', ground: '#7bc043', building: '#d8c3a5', glow: '#ffd479' },
+  'haunted-world': { background: '#141a33', ground: '#4a4553', building: '#5b5f78', glow: '#ffb454' },
 };
 
 /** Lazily loaded so three.js stays out of the landing-page bundle. */

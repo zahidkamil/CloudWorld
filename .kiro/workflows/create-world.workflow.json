@@ -1,36 +1,40 @@
 {
   "name": "create-world",
-  "description": "Create a new CloudWorld world: instruction set, Blender models, library.json, registration, and verification.",
+  "description": "Create a new CloudWorld world from a short description: name and id are deduced, then instruction set, Blender models, library.json, registration, inspection hooks, and verification.",
   "inputs": {
-    "worldId": "string",
-    "worldName": "string",
-    "referenceImage": "file",
-    "brief": "prompt"
+    "description": "prompt",
+    "referenceImage": "file"
   },
   "steps": [
     {
       "type": "step",
-      "id": "design",
+      "id": "concept",
       "agent": "world-builder",
-      "prompt": "Create the instruction set for a new CloudWorld world. Follow the create-cloudworld-world skill, steps 1 to 4.\n\nworldId: {{worldId}}\nworldName: {{worldName}}\nreferenceImage: {{referenceImage}} (a file name inside docs/images/, or 'none' when there is no image)\nbrief: {{brief}}\n\nCopy worlds/_template to worlds/{{worldId}}. If referenceImage is not 'none', read it and list its exact docs/images/ path under reference_images in world.md. Otherwise write the brief into the front matter and describe the look in words. Fill in world.md and resources.md, then run `npm run validate:worlds` and fix every error. Do not build 3D models in this step.\n\nWhen the resource list is ready, call send_message with severity warning and ask the user to review worlds/{{worldId}}/resources.md and adjust any looks. Continue only after the user confirms, then finish with send_message severity success and a one-paragraph summary."
+      "prompt": "Create the instruction set for a new CloudWorld world from this description. Follow the create-cloudworld-world skill, steps 1 to 4.\n\ndescription: {{description}}\nreferenceImage: {{referenceImage}} (a file name inside docs/images/, or 'none')\n\n1. Deduce the world. Choose a short, evocative name of 1 to 3 words in Title Case from the description (use a name the user gave if there is one) and a kebab-case id from it. The id must not already exist under worlds/ or public/worlds/ and must not be 'template'. If the id exists, add a distinguishing word.\n2. Copy worlds/_template to worlds/<id>. In world.md use the description as the brief (40+ characters). If referenceImage is not 'none', read docs/images/<file>, list its exact path under reference_images and describe what to copy from it. If it is 'none', leave reference_images empty and describe the look in words (shapes, materials, colours, mood, comparable places) in the Reference image notes section.\n3. Fill in world.md fully (palette with hex values, lighting, camera, ground and props, model style guide) and resources.md (4 structure, 12 family and about 10 key-service entries, each with a real look description). Keep the world visually distinct from every existing world: different silhouettes, materials and layout structure, never a recolour.\n4. Run `npm run validate:worlds` and fix every error. Do not build 3D models in this step.\n5. Your final message MUST begin with exactly these two lines, then a short summary of the look:\nWORLD_ID: <id>\nWORLD_NAME: <name>\n\nBefore finishing, call send_message with severity warning, tell the user the deduced name and id, and ask them to review worlds/<id>/resources.md and adjust any looks. Continue only after the user confirms, then call send_message with severity success."
     },
     {
       "type": "step",
       "id": "models",
       "agent": "world-builder",
-      "prompt": "Build the 3D models for world {{worldId}} with the Blender MCP, following skill steps 5 and 6 and the entries in worlds/{{worldId}}/resources.md (the user has reviewed them).\n\nPrevious step summary:\n{{steps.design.output}}\n\nBuild structure and family entries first, then key services. Save reusable scripts in worlds/{{worldId}}/blender/. Look at each model from two angles and compare with the style source. Export optimized GLBs to public/worlds/{{worldId}}/models/ and set each finished entry to built. Run `npm run validate:worlds`. If Blender is unavailable or a tool needs approval you lack, call send_message with severity warning and ask the user. Finish with send_message severity success and the list of built and missing models."
+      "prompt": "Build the 3D models for the new world with the Blender MCP, following skill steps 5 and 6.\n\nThe previous step reported the world id and name on its first two lines:\n{{steps.concept.output}}\n\nUse that WORLD_ID everywhere below. Build the entries in worlds/<id>/resources.md (the user has reviewed them): structure and family entries first, then key services. Save reusable scripts in worlds/<id>/blender/. Look at each model from two angles and compare it with the style source in world.md. Export optimized GLBs to public/worlds/<id>/models/ and set each finished entry to built.\n\nThe project hooks check your work: saving a GLB runs `node scripts/validate-glb.mjs`, and after a spec task the Blender model review hook (.kiro/hooks/blender-model-review.json) describes the Blender MCP inspection. Run `npm run validate:glb` and `npm run validate:worlds` yourself and fix every failure. If Blender is unavailable or a tool needs approval you lack, call send_message with severity warning and ask the user. Finish with send_message severity success and the list of built and missing models."
     },
     {
       "type": "step",
       "id": "integrate",
       "agent": "world-builder",
-      "prompt": "Integrate world {{worldId}} into the app, following skill steps 7 to 9.\n\nPrevious step summary:\n{{steps.models.output}}\n\nWrite public/worlds/{{worldId}}/library.json from world.md and resources.md, register the world ({{worldName}}) in the world list, then build the app and capture screenshots of the sample plan in this world (scripts/capture.mjs or Playwright MCP). Compare with the style source, fix obvious problems, and save public/worlds/{{worldId}}/preview.webp from the real scene. Finish with send_message severity success and the screenshot paths."
+      "prompt": "Integrate the new world into the app, following skill steps 7 to 9.\n\nWorld details from the first step:\n{{steps.concept.output}}\n\nModel step summary:\n{{steps.models.output}}\n\nWrite public/worlds/<id>/library.json from world.md and resources.md. Register the world in src/themes/worlds.ts (add an entry to ALL_WORLDS with its name, a tagline, a blurb, an accent colour from the palette, and available: true). Then build the app and capture screenshots of the multi-region sample in this world (scripts/capture.mjs or the Playwright MCP). Compare with the style source, fix obvious problems, and save public/worlds/<id>/preview.webp from the real scene. Finish with send_message severity success and the screenshot paths."
+    },
+    {
+      "type": "step",
+      "id": "inspect",
+      "agent": "world-builder",
+      "prompt": "Inspect the new world with the project's inspection hooks. Do not redesign anything.\n\nWorld details:\n{{steps.concept.output}}\n\n1. Run `npm run validate:worlds`, `npm run validate:glb`, and `npm run review:visual`. Fix failures that your work caused.\n2. Read .kiro/hooks/visual-review-playwright.json and carry out its prompt for the new world: lighting, resource selection, console errors, using the Playwright MCP (fall back to `npm run review:visual` and say so if the MCP cannot start).\n3. Read .kiro/hooks/blender-model-review.json and carry out its prompt for the new models using the Blender MCP.\n4. Report a table of results for the visual review and the Blender model review, with screenshots under .screenshots/review/. Finish with send_message severity success, or error if a check still fails."
     },
     {
       "type": "step",
       "id": "verify",
       "agent": "world-builder",
-      "prompt": "Verify world {{worldId}} without changing design decisions. Follow skill step 10.\n\nPrevious step summary:\n{{steps.integrate.output}}\n\nRun `npm run validate` and `npm run test:e2e`. Confirm that switching to this world does not change the graph, selection, or findings. Fix test or validation failures that your work caused. Do not commit or push. Report the checklist at the end of the skill with pass or fail for each item, then finish with send_message severity success (or error if anything still fails)."
+      "prompt": "Verify the new world. Follow skill step 10.\n\nWorld details:\n{{steps.concept.output}}\n\nInspection results:\n{{steps.inspect.output}}\n\nRun `npm run validate` and `npm run test:e2e`. Confirm that switching to this world does not change the graph, selection, or findings, and that the world card shows its preview on the World screen. Fix test or validation failures that your work caused. Do not commit or push. Report the checklist at the end of the skill with pass or fail for each item, then finish with send_message severity success (or error if anything still fails)."
     }
   ]
 }

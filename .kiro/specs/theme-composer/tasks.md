@@ -20,7 +20,7 @@
 - [ ] 6. Haunted World library
   - [ ] 6.1 Blender MCP: build models from `worlds/haunted-world/resources.md`; export GLBs
   - [ ] 6.2 `library.json`, fog, ghost light, bloom; screenshot review against `docs/images/Haunted-Theme.jpeg`
-  - [ ] 6.3 Theme independence tests (graph, selection, findings unchanged)
+  - [ ] 6.3 Theme independence tests (graph, selection, findings unchanged) and a distinctness test (no shared model files between worlds)
   - _Requirements: R2.2, R2.3, R3_
 
 - [ ] 8. Saved themes

@@ -1,40 +1,57 @@
 import { create } from 'zustand';
+import { useDefender } from '@/apps/defender/defenderStore';
 import type { InfrastructureGraph } from '@/engine/graph/types';
+import { loadSettings, saveSettings, type Settings } from './settings';
 
-export type Screen = 'landing' | 'world';
+/** title = start menu, worlds = world select, settings = defaults, world = playing. */
+export type Screen = 'title' | 'worlds' | 'settings' | 'world';
 export type GameMode = 'explorer' | 'defender';
-export type BuiltInThemeId = 'modern-city' | 'haunted-world';
 
 export interface SessionState {
   screen: Screen;
   mode: GameMode;
   themeId: string;
+  settings: Settings;
   /** Current infrastructure. Replaced only by a confirmed import (R1.5). */
   graph: InfrastructureGraph | null;
   importOpen: boolean;
   setGraph: (graph: InfrastructureGraph) => void;
   openImport: () => void;
   closeImport: () => void;
+  goTo: (screen: Exclude<Screen, 'world'>) => void;
   enterWorld: (themeId: string, mode?: GameMode) => void;
+  updateSettings: (patch: Partial<Omit<Settings, 'version'>>) => void;
   setMode: (mode: GameMode) => void;
   setTheme: (themeId: string) => void;
   returnToMenu: () => void;
 }
 
+const initialSettings = loadSettings();
+
 /**
  * Shared DOM/canvas session state. Theme and mode changes must never mutate the graph.
  */
-export const useSession = create<SessionState>((set) => ({
-  screen: 'landing',
-  mode: 'explorer',
-  themeId: 'modern-city',
+export const useSession = create<SessionState>((set, get) => ({
+  screen: 'title',
+  mode: initialSettings.defaultMission,
+  themeId: initialSettings.defaultWorld,
+  settings: initialSettings,
   graph: null,
   importOpen: false,
-  setGraph: (graph) => set({ graph, importOpen: false }),
+  setGraph: (graph) => {
+    useDefender.getState().reset();
+    set({ graph, importOpen: false });
+  },
   openImport: () => set({ importOpen: true }),
   closeImport: () => set({ importOpen: false }),
+  goTo: (screen) => set({ screen }),
   enterWorld: (themeId, mode) => set((s) => ({ screen: 'world', themeId, mode: mode ?? s.mode })),
+  updateSettings: (patch) => {
+    const settings = { ...get().settings, ...patch };
+    saveSettings(settings);
+    set({ settings });
+  },
   setMode: (mode) => set({ mode }),
   setTheme: (themeId) => set({ themeId }),
-  returnToMenu: () => set({ screen: 'landing' }),
+  returnToMenu: () => set({ screen: 'title' }),
 }));

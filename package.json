@@ -23,7 +23,9 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "validate:worlds": "node scripts/validate-worlds.mjs",
-    "validate": "npm run typecheck && npm run lint && npm run validate:worlds && npm run test"
+    "validate:glb": "node scripts/validate-glb.mjs",
+    "review:visual": "node scripts/visual-review.mjs",
+    "validate": "npm run typecheck && npm run lint && npm run validate:worlds && npm run validate:glb && npm run test"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

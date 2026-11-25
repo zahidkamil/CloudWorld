@@ -13,6 +13,19 @@ export interface Placement {
   source: string;
 }
 
+/** A security group rule that accepts traffic from anywhere on the internet. */
+export interface OpenIngress {
+  fromPort: number;
+  toPort: number;
+  /** `tcp`, `udp`, `icmp`, or `-1` for every protocol. */
+  protocol: string;
+}
+
+/** Safe, non-secret facts the security rules read. Only set when the resource has them. */
+export interface ResourceExposure {
+  openIngress: OpenIngress[];
+}
+
 export interface CloudResource {
   /** Terraform address, e.g. `module.web.aws_instance.app[0]`. */
   id: string;
@@ -26,6 +39,8 @@ export interface CloudResource {
   placement: Placement;
   /** Allowlisted, non-sensitive scalar attributes only. */
   attributes: Record<string, string | number | boolean>;
+  /** Exposure facts for security rules (security groups only for now). */
+  exposure?: ResourceExposure;
   action: PlanAction;
 }
 

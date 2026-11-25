@@ -1,4 +1,4 @@
-import type { BuiltInThemeId } from '@/app/store';
+import type { WorldId } from '@/themes/worlds';
 
 /**
  * Interim isometric SVG previews for the world cards.
@@ -67,16 +67,50 @@ function Windows({
   return <g>{items}</g>;
 }
 
+function Slab({
+  top,
+  left,
+  right,
+  thickness = 12,
+}: {
+  top: string;
+  left: string;
+  right: string;
+  thickness?: number;
+}) {
+  const size = 7.4;
+  const a = iso(0, 0);
+  const b = iso(size, 0);
+  const c = iso(size, size);
+  const d = iso(0, size);
+  const down = (p: [number, number]): [number, number] => [p[0], p[1] + thickness];
+  return (
+    <g>
+      <polygon points={pts([d, c, down(c), down(d)])} fill={left} />
+      <polygon points={pts([c, b, down(b), down(c)])} fill={right} />
+      <polygon points={pts([a, b, c, d])} fill={top} />
+    </g>
+  );
+}
+
 function CityArt() {
   const towers = [
-    { gx: 1, gy: 1, h: 70 },
-    { gx: 3, gy: 1, h: 46 },
-    { gx: 1, gy: 3, h: 38 },
-    { gx: 3, gy: 3, h: 92 },
-    { gx: 5, gy: 2, h: 54 },
-    { gx: 2, gy: 5, h: 60 },
-    { gx: 5, gy: 5, h: 30 },
+    { gx: 1, gy: 1, h: 66, top: '#d8c3a5', left: '#c4ae90', right: '#ad9878' },
+    { gx: 3, gy: 1, h: 44, top: '#e9e4da', left: '#d3cdc0', right: '#bbb5a8' },
+    { gx: 1, gy: 3, h: 36, top: '#cfd3dc', left: '#b8bdc9', right: '#a0a6b4' },
+    { gx: 3, gy: 3, h: 90, top: '#e2d2b8', left: '#cdbb9d', right: '#b5a384' },
+    { gx: 5, gy: 2, h: 52, top: '#cfd3dc', left: '#b8bdc9', right: '#a0a6b4' },
+    { gx: 2, gy: 5, h: 58, top: '#e9e4da', left: '#d3cdc0', right: '#bbb5a8' },
+    { gx: 5, gy: 5, h: 28, top: '#d8c3a5', left: '#c4ae90', right: '#ad9878' },
   ];
+  const trees = [
+    [0.5, 4.6, '#7bc043'],
+    [4.7, 0.4, '#f3a6c8'],
+    [6.8, 4.0, '#7bc043'],
+    [4.0, 6.8, '#f3a6c8'],
+    [0.4, 0.5, '#f3a6c8'],
+    [6.9, 6.7, '#7bc043'],
+  ] as const;
   return (
     <svg
       viewBox="0 0 320 220"
@@ -85,32 +119,30 @@ function CityArt() {
       aria-label="Modern City preview"
     >
       <defs>
-        <radialGradient id="city-bg" cx="50%" cy="40%" r="70%">
-          <stop offset="0" stopColor="#1e2b4a" />
-          <stop offset="1" stopColor="#070b16" />
-        </radialGradient>
+        <linearGradient id="city-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#a9dcf7" />
+          <stop offset="1" stopColor="#e3f5ff" />
+        </linearGradient>
       </defs>
       <rect width="320" height="220" fill="url(#city-bg)" />
-      <IsoBox gx={0} gy={0} size={7.4} h={0} top="#1b2333" left="#111827" right="#0f1522" />
-      {[...Array(8).keys()].map((i) => {
-        const [x, y] = iso(i, 0.1);
-        const [x2, y2] = iso(i, 7.3);
-        return <line key={i} x1={x} y1={y} x2={x2} y2={y2} stroke="#2a3550" strokeWidth={0.6} />;
-      })}
+      <Slab top="#8ccf52" left="#c8794a" right="#a9623a" />
+      <polygon points={pts([iso(0, 3.2), iso(7.4, 3.2), iso(7.4, 4.2), iso(0, 4.2)])} fill="#3d4150" />
+      <polygon points={pts([iso(3.2, 0), iso(4.2, 0), iso(4.2, 7.4), iso(3.2, 7.4)])} fill="#3d4150" />
+      <polygon points={pts([iso(0, 3.65), iso(7.4, 3.65), iso(7.4, 3.75), iso(0, 3.75)])} fill="#f2c94c" />
       {towers.map((t) => (
         <g key={`${t.gx}-${t.gy}`}>
-          <IsoBox gx={t.gx} gy={t.gy} size={1.4} h={t.h} top="#334155" left="#1e293b" right="#16202f" />
-          <Windows gx={t.gx} gy={t.gy} size={1.4} h={t.h} color={t.h > 60 ? '#5eead4' : '#fcd34d'} />
+          <IsoBox gx={t.gx} gy={t.gy} size={1.4} h={t.h} top={t.top} left={t.left} right={t.right} />
+          <Windows gx={t.gx} gy={t.gy} size={1.4} h={t.h} color="#5f7fa8" />
         </g>
       ))}
-      {[
-        [0.5, 4.6],
-        [4.6, 0.5],
-        [6.8, 4],
-        [4, 6.8],
-      ].map(([gx = 0, gy = 0], i) => {
+      {trees.map(([gx, gy, c], i) => {
         const [x, y] = iso(gx, gy, 0);
-        return <circle key={i} cx={x} cy={y} r={2.2} fill="#fde68a" opacity={0.9} />;
+        return (
+          <g key={i}>
+            <rect x={x - 0.8} y={y - 6} width={1.6} height={6} fill="#7a4b2a" />
+            <circle cx={x} cy={y - 9} r={5.2} fill={c} />
+          </g>
+        );
       })}
     </svg>
   );
@@ -132,14 +164,23 @@ function HauntedArt() {
     >
       <defs>
         <linearGradient id="haunt-bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#f97316" />
-          <stop offset="1" stopColor="#9a3412" />
+          <stop offset="0" stopColor="#141a33" />
+          <stop offset="1" stopColor="#2a2550" />
         </linearGradient>
+        <radialGradient id="haunt-glow" cx="50%" cy="60%" r="60%">
+          <stop offset="0" stopColor="#ff9a3c" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#ff9a3c" stopOpacity="0" />
+        </radialGradient>
       </defs>
       <rect width="320" height="220" fill="url(#haunt-bg)" />
-      <circle cx="262" cy="40" r="16" fill="#fff7d6" opacity={0.9} />
-      <IsoBox gx={0} gy={0} size={7.4} h={0} top="#d6d0c4" left="#3b2a2a" right="#2a1d1d" />
-      <polygon points={pts([iso(0, 3.2), iso(7.4, 3.2), iso(7.4, 4.2), iso(0, 4.2)])} fill="#3f3f46" />
+      <rect width="320" height="220" fill="url(#haunt-glow)" />
+      <circle cx="262" cy="38" r="14" fill="#e8ecff" opacity={0.9} />
+      <Slab top="#4a4553" left="#2f2b38" right="#25222d" />
+      <polygon
+        points={pts([iso(0.4, 5.4), iso(7, 5.4), iso(7, 6.2), iso(0.4, 6.2)])}
+        fill="#8e8aa0"
+        opacity={0.45}
+      />
       {houses.map((house) => {
         const size = 2;
         const peak = iso(house.gx + size / 2, house.gy + size / 2, house.h + 22);
@@ -153,35 +194,128 @@ function HauntedArt() {
               gy={house.gy}
               size={size}
               h={house.h}
-              top="#6b5b6e"
-              left="#5b4a5e"
-              right="#4a3b4d"
+              top="#5b5f78"
+              left="#4b4e66"
+              right="#3b3e54"
             />
-            <polygon points={pts([l, c, peak])} fill="#2e2438" />
-            <polygon points={pts([c, r, peak])} fill="#221a2b" />
-            <Windows gx={house.gx} gy={house.gy} size={size} h={house.h} color="#fdba74" />
+            <polygon points={pts([l, c, peak])} fill="#3c4f9c" />
+            <polygon points={pts([c, r, peak])} fill="#2f3d7d" />
+            <Windows gx={house.gx} gy={house.gy} size={size} h={house.h} color="#ffb454" />
           </g>
         );
       })}
       {[
-        [0.4, 6.5],
-        [3.3, 6.6],
-        [6.6, 2.6],
+        [0.4, 6.6],
+        [3.4, 6.8],
+        [6.7, 2.6],
         [6.8, 6.8],
       ].map(([gx = 0, gy = 0], i) => {
         const [x, y] = iso(gx, gy, 0);
         return (
           <g key={i}>
-            <ellipse cx={x} cy={y - 4} rx={6} ry={4.8} fill="#ea580c" />
+            <ellipse cx={x} cy={y - 4} rx={6} ry={4.8} fill="#e8741c" />
             <rect x={x - 0.8} y={y - 10.5} width={1.6} height={2.5} fill="#365314" />
             <circle cx={x} cy={y - 4} r={1.6} fill="#fde047" />
           </g>
         );
       })}
+      {[
+        [2.9, 3.0],
+        [5.9, 3.4],
+      ].map(([gx = 0, gy = 0], i) => {
+        const [x, y] = iso(gx, gy, 0);
+        return <ellipse key={i} cx={x} cy={y - 12} rx={3.2} ry={9} fill="#52e0d0" opacity={0.45} />;
+      })}
     </svg>
   );
 }
 
-export function WorldPreviewArt({ themeId }: { themeId: BuiltInThemeId }) {
-  return themeId === 'modern-city' ? <CityArt /> : <HauntedArt />;
+function AquaArt() {
+  const domes = [
+    { x: 105, y: 128, r: 34, tint: '#8fe3ff' },
+    { x: 205, y: 112, r: 44, tint: '#b79cff' },
+    { x: 150, y: 150, r: 26, tint: '#7ff0e0' },
+  ];
+  const corals = [
+    [24, 190, '#ff6fa8'],
+    [60, 200, '#ff9a3c'],
+    [262, 196, '#b377ff'],
+    [296, 186, '#ff6fa8'],
+    [180, 204, '#ffd479'],
+  ] as const;
+  return (
+    <svg
+      viewBox="0 0 320 220"
+      preserveAspectRatio="xMidYMid slice"
+      role="img"
+      aria-label="Aqua World preview"
+    >
+      <defs>
+        <linearGradient id="aqua-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#0a5fb0" />
+          <stop offset="0.55" stopColor="#1aa6e0" />
+          <stop offset="1" stopColor="#35d6d0" />
+        </linearGradient>
+        <radialGradient id="aqua-glow" cx="50%" cy="45%" r="55%">
+          <stop offset="0" stopColor="#bff6ff" stopOpacity="0.55" />
+          <stop offset="1" stopColor="#bff6ff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="320" height="220" fill="url(#aqua-bg)" />
+      <rect width="320" height="220" fill="url(#aqua-glow)" />
+      <ellipse cx="160" cy="170" rx="132" ry="26" fill="#4a5a70" />
+      <ellipse cx="160" cy="164" rx="124" ry="22" fill="#d9c9a6" />
+      <rect x="60" y="150" width="200" height="6" rx="3" fill="#b88b5a" />
+      {domes.map((d) => (
+        <g key={d.x}>
+          <path
+            d={`M${d.x - d.r} ${d.y + d.r * 0.55} A${d.r} ${d.r} 0 0 1 ${d.x + d.r} ${d.y + d.r * 0.55} Z`}
+            fill={d.tint}
+            opacity={0.75}
+          />
+          <path
+            d={`M${d.x - d.r} ${d.y + d.r * 0.55} A${d.r} ${d.r} 0 0 1 ${d.x + d.r} ${d.y + d.r * 0.55}`}
+            fill="none"
+            stroke="#f3fbff"
+            strokeWidth={2}
+          />
+          <rect x={d.x - d.r} y={d.y + d.r * 0.55} width={d.r * 2} height={8} rx={3} fill="#e9f1f7" />
+          <circle cx={d.x} cy={d.y + d.r * 0.2} r={3} fill="#ffd479" />
+        </g>
+      ))}
+      <path d="M205 68 L212 40 L219 68 Z" fill="#e9f1f7" />
+      <circle cx="212" cy="38" r="3" fill="#ffd479" />
+      {corals.map(([x, y, c]) => (
+        <g key={`${x}`} stroke={c} strokeWidth={4} strokeLinecap="round" fill="none">
+          <path d={`M${x} ${y} v-18 M${x} ${y - 10} l-7 -9 M${x} ${y - 12} l7 -8`} />
+        </g>
+      ))}
+      <ellipse cx="258" cy="46" rx="14" ry="9" fill="#d9a8ff" opacity={0.8} />
+      <path
+        d="M250 52 q-2 14 2 20 M258 54 q0 14 0 22 M266 52 q2 14 -2 20"
+        stroke="#d9a8ff"
+        strokeWidth={2}
+        fill="none"
+        opacity={0.8}
+      />
+    </svg>
+  );
+}
+
+/**
+ * Built-in worlds use the drawn art above until their real scene captures exist.
+ * Worlds made with the create-world workflow use public/worlds/<id>/preview.webp.
+ */
+export function WorldPreviewArt({ themeId }: { themeId: WorldId }) {
+  if (themeId === 'aqua-world') return <AquaArt />;
+  if (themeId === 'modern-city') return <CityArt />;
+  if (themeId === 'haunted-world') return <HauntedArt />;
+  return (
+    <img
+      className="world-preview-img"
+      src={`${import.meta.env.BASE_URL}worlds/${themeId}/preview.webp`}
+      alt={`${themeId.replaceAll('-', ' ')} preview`}
+      loading="lazy"
+    />
+  );
 }

@@ -107,9 +107,18 @@ export function ImportDialog() {
           </button>
         </header>
         <p className="import-dialog__hint">
-          Plans are read in your browser and never uploaded. Create one with{' '}
-          <code>terraform show -json planfile</code>.
+          Plans are read in your browser and never uploaded. You only need <code>plan</code> and{' '}
+          <code>show</code>. Never <code>apply</code>.
         </p>
+        <details className="import-help">
+          <summary>How do I get a plan file?</summary>
+          <pre>
+            {`terraform init
+terraform plan -out=plan.tfplan
+terraform show -json plan.tfplan > plan.json`}
+          </pre>
+          <p>Then upload or paste plan.json. It can contain secrets, so do not share it.</p>
+        </details>
 
         {draft ? (
           <>

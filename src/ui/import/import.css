@@ -154,3 +154,24 @@
   background: rgba(251, 146, 60, 0.14);
   border: 1px solid rgba(251, 146, 60, 0.5);
 }
+
+.import-help {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+.import-help summary {
+  cursor: pointer;
+  color: var(--text);
+}
+.import-help pre {
+  margin: 8px 0;
+  padding: 10px;
+  overflow: auto;
+  border-radius: 8px;
+  background: var(--bg-1);
+  color: var(--text);
+  font-size: 0.8rem;
+}
+.import-help p {
+  margin: 0;
+}

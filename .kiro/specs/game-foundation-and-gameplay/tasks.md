@@ -20,6 +20,7 @@ Task numbers map to the global sequence in `docs/PROGRESS.md`.
   - [ ] 3.1 Deterministic layout for global hub, region islands, AZ districts (tests)
   - [ ] 3.2 Shared R3F scene, isometric camera, controls, hover, select, click-to-focus
   - [ ] 3.3 Inspector panel
+  - [ ] 3.4 Relationship arcs: dotted parabolic arcs from the selected resource to dependencies and consumers (capped, theme-colored, reduced-motion safe) with a test on arc endpoints
   - _Requirements: R3, R4.1, R5.1, R5.2_
 
 - [ ] 4. Expanded registry and shared highlighting
@@ -28,6 +29,7 @@ Task numbers map to the global sequence in `docs/PROGRESS.md`.
   - _Requirements: R2.2–R2.4, R4_
 
 - [ ] 9. Defender rules
+  - [x] 9.0 Early slice: `open-sensitive-port` rule, `scanGraph`, scoring (100 pts, hints -25, wrong -10), Attack Path panel with hints and simulated fixes, `find-terraform-security-issues` skill
   - [ ] 9.1 Rule fixtures (positive, negative, partial data) and rule implementations
   - [ ] 9.2 Attack-path search, finding markers, remediation cards, deterministic scoring
   - _Requirements: R6.1–R6.3_

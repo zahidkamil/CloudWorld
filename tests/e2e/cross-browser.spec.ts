@@ -1,16 +1,11 @@
 import { expect, test, type Page } from '@playwright/test';
+import { enterWorld } from './helpers';
 
 /**
  * Cross-engine checks (Chromium, Firefox, WebKit): WebGL initialization, Three.js rendering,
  * theme selection, navigation, and camera interaction. Gameplay journeys are added here as
  * Explorer and Defender features land.
  */
-
-async function enterWorld(page: Page, world: 'Modern City' | 'Haunted World', mode?: 'Defender') {
-  await page.goto('./');
-  if (mode) await page.getByRole('radio', { name: new RegExp(mode) }).click();
-  await page.getByRole('button', { name: new RegExp(`Enter ${world}`) }).click();
-}
 
 async function waitForFrames(page: Page, minFrames: number) {
   const canvas = page.getByTestId('world-canvas');
@@ -87,18 +82,26 @@ test.describe('cross-browser rendering', () => {
   });
 
   test('navigation keeps mode and theme consistent', async ({ page }) => {
-    await enterWorld(page, 'Haunted World', 'Defender');
+    await enterWorld(page, 'Haunted World', 'Attack Path');
     await waitForFrames(page, 10);
-    await expect(page.getByRole('button', { name: 'Defender' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Attack Path' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByLabel('Theme')).toHaveValue('haunted-world');
 
-    await page.getByRole('button', { name: 'Explorer' }).click();
-    await expect(page.getByRole('button', { name: 'Explorer' })).toHaveAttribute('aria-pressed', 'true');
+    await page.getByRole('button', { name: 'Showcase' }).click();
+    await expect(page.getByRole('button', { name: 'Showcase' })).toHaveAttribute('aria-pressed', 'true');
 
     await page.getByRole('button', { name: /Menu/ }).click();
     await expect(page.getByRole('heading', { name: 'CloudWorld' })).toBeVisible();
 
-    await page.getByRole('button', { name: /Enter Modern City/ }).click();
+    await page
+      .getByRole('navigation', { name: 'Main menu' })
+      .getByRole('button', { name: /^World/ })
+      .click();
+    await page.getByRole('button', { name: /^Modern City\./ }).click();
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: /Start Showcase/ })
+      .click();
     await expect(page.getByLabel('Theme')).toHaveValue('modern-city');
     await waitForFrames(page, 10);
   });

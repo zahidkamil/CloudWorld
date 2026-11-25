@@ -10,8 +10,8 @@ src/
     topology/     Region / AZ / global / unresolved placement (pure)
     layout/       Deterministic world layout (pure)
     render/       Shared React Three Fiber scene, camera, highlighting
-    security/     Defender rules and attack paths (pure)
-  themes/         ThemeDescriptor, library loader, variation, storage, (later) llm/
+    security/     Defender rules, scan, scoring (pure)
+  themes/         World list (worlds.ts), library loader, variation, storage, (later) llm/
   apps/
     explorer/     Explorer-specific overlays
     defender/     Defender scoring, remediation, missions

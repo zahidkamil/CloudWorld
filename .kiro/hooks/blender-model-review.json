@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Blender model review with Blender MCP",
+      "trigger": "PostTaskExec",
+      "description": "After a spec task that built or changed world models, inspect them in Blender with the Blender MCP.",
+      "action": {
+        "type": "agent",
+        "prompt": "BLENDER MODEL REVIEW (run only if this task added or changed files under public/worlds/*/models/ or worlds/*/blender/; check with `git status --short`. Otherwise reply 'model review not needed' and stop).\n\n1. Run `node scripts/validate-glb.mjs` and fix every failure first (size under 150 KB per model and 3 MB per world, at most 4000 triangles and 3 materials, no cameras or lights, every file listed in worlds/<id>/resources.md).\n2. Use the Blender MCP. Start with get_scene_info (always allowed). For each changed model, import it into a clean scene with execute_blender_code (this needs approval under the current permissions: ask once for exactly that, never broaden permissions), then use look from at least two angles and check:\n   - SCALE AND PIVOT: 1 unit = 1 metre, footprint about 8 x 8, origin at base centre, +Y up, sits on the ground plane.\n   - SILHOUETTE: at least two levels of detail (base, body, roof or top detail). Not a plain cube or cylinder.\n   - STYLE: matches the world's reference image under docs/images/ and the entry in worlds/<id>/resources.md (colours from the world palette, emissive only on windows, lamps, candles, glow).\n   - MESH HEALTH: use get_scene_info with fields topology, no non-manifold edges or loose vertices, normals facing out, materials shared.\n3. Report a table: model, scale/pivot, silhouette, style, mesh health, verdict. Rebuild failing models from the scripts in worlds/<id>/blender/, export again, and re-run step 1. Do not commit or push."
+      }
+    }
+  ]
+}

@@ -20,7 +20,7 @@ settings into a `ThemeDescriptor` and adds region and AZ variation.
 - R2.1 Modern City SHALL follow `docs/images/City-Theme.jpeg`: bright isometric city slab with pastel stone towers, blossom and round trees, river and stone bridge, roads, crosswalks, small vehicles. A night lighting preset SHALL reuse the same models.
 - R2.2 Haunted World SHALL follow `docs/images/Haunted-Theme.jpeg`: hand-painted gothic courtyard with blue slate roofs, cobblestone, glowing arched windows, pumpkins, candles, tombstones, chain fence, banner, angel statue, ghost wisps, fog.
 - R2.5 Aqua World SHALL follow `docs/images/Aqua-Theme.png` (glass domes, boardwalks, reef islands, sea life) and SHALL be built through the workflow in Task 11.
-- R2.3 The two worlds SHALL differ in geometry, materials, lighting, and props. Neither SHALL be a recolour of the other.
+- R2.3 Worlds SHALL differ in geometry, materials, lighting, props, and layout structure. No world SHALL reuse another world's models or be a recolour of it. An automated test SHALL fail if two worlds share a model file or use the same placeholder shapes.
 - R2.4 Both SHALL render every registry resource with a model or fallback.
 
 ## R3 Theme independence

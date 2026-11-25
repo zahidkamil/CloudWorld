@@ -70,6 +70,13 @@ Order: resource `region` attribute (AWS provider v6 per-resource region) -> `ava
 - Landmarks resolved by `registry.renderer` -> theme kit component. Repeated props use `InstancedMesh`.
 - Highlight state from a Zustand selection store drives emissive/outline uniforms; no re-layout on selection.
 
+## Relationship arcs
+
+On selection, `relationshipsOf(graph, id)` (already implemented, Task 2) gives dependencies and consumers. `RelationArcs` (engine/render)
+draws one Drei `QuadraticBezierLine` per related resource: dashed, lifted at the midpoint by a height proportional to distance,
+`dashOffset` animated for flow (static under reduced motion). Colors come from the theme palette (dependency vs. used-by).
+Peers are shown by glow, not arcs. Arcs are cheap (one Line2 each, capped), and need only layout positions, so they ship with Task 3.
+
 ## Security engine
 
 `SecurityRule = { id, title, severity, evaluate(graph): Finding[] }`. Attack paths are BFS over network/reference edges from an internet-exposed entry to sensitive targets. Remediation state is a separate `Set<findingId>`.

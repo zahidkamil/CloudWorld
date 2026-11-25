@@ -27,7 +27,8 @@ Rules:
 
 ## Adding a world
 
-Run the Kiro Workflow `create-world` (`.kiro/workflows/create-world.workflow.json`, agent `world-builder`) or follow
+Run the Kiro Workflow `create-world` (`.kiro/workflows/create-world.workflow.json`, agent `world-builder`). Give it a description of
+the world in one or many sentences; the name and id are deduced from it. Or follow
 `.kiro/skills/create-cloudworld-world/SKILL.md` by hand. Start by copying `worlds/_template/`.
 
 ## Existing worlds

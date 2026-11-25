@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Visual review with Playwright MCP",
+      "trigger": "PostTaskExec",
+      "description": "After a spec task, review how the app looks: lighting, resource selection, and console errors, using the Playwright MCP.",
+      "action": {
+        "type": "agent",
+        "prompt": "VISUAL REVIEW (run only if this task changed src/engine/render, src/themes, src/ui, src/apps, worlds/, or public/worlds/; otherwise reply 'visual review not needed' and stop).\n\n1. Build and serve the production app: `npm run build`, then start `npx vite preview --port 4173 --strictPort` as a background process (do not use shell sleep loops).\n2. Use the Playwright MCP (browser_navigate to http://localhost:4173/CloudWorld/, browser_snapshot, browser_take_screenshot, browser_console_messages). If the MCP cannot start (it needs Google Chrome), run `npm run review:visual` instead, which uses the same criteria with bundled Chromium, and say that the MCP was unavailable.\n3. For each world (Modern City, Haunted World): open World > the world > Start Showcase, load the multi-region sample from the Infrastructure panel, wait for the 3D scene, then check:\n   - LIGHTING: key light with soft shadows, fill light, glowing windows or lamps, not fully black, not washed out, ground never a flat empty plane. Compare with the world's reference image under docs/images/ (City-Theme.jpeg, Haunted-Theme.jpeg, Aqua-Theme.png) and its worlds/<id>/world.md palette.\n   - RESOURCE SELECTION: click a resource in the Infrastructure panel (and in the 3D scene once selection exists). The Resource details card opens, the selected resource is highlighted, dependencies glow, others dim to about 35% but stay readable.\n   - CONSOLE: browser_console_messages must show no errors or warnings that come from the app.\n   - Also open Attack Path mode and confirm the findings panel renders (score, findings caught, hints) with no layout overlap at 1440x900.\n4. Report a short table: world, lighting, selection, console, verdict. List concrete problems with file paths to fix. Fix obvious problems yourself, then re-run. Stop the preview server when done. Do not commit or push."
+      }
+    }
+  ]
+}

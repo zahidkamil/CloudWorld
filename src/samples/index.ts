@@ -13,4 +13,10 @@ export const BUNDLED_SAMPLES: BundledSample[] = [
     description: 'Two regions, three AZs each, a reusable network module, shared security groups.',
     load: async () => JSON.stringify((await import('./multi-region.plan.json')).default),
   },
+  {
+    id: 'single-az',
+    name: 'Single-AZ sample',
+    description: 'One region and one availability zone: a small web app with a network load balancer.',
+    load: async () => JSON.stringify((await import('./single-az.plan.json')).default),
+  },
 ];

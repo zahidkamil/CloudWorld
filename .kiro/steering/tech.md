@@ -9,14 +9,16 @@
 
 ## Commands
 
-| Purpose                                 | Command                                                  |
-| --------------------------------------- | -------------------------------------------------------- |
-| Dev server (run manually, long-running) | `npm run dev`                                            |
-| Fast checks                             | `npm run validate` (typecheck + lint + unit)             |
-| Unit tests                              | `npm test`                                               |
-| E2E (builds + serves `/CloudWorld/`)    | `npm run test:e2e`                                       |
-| Production build                        | `npm run build`                                          |
-| Milestone screenshot                    | `node scripts/capture.mjs <url> .screenshots/<name>.png` |
+| Purpose                                 | Command                                                     |
+| --------------------------------------- | ----------------------------------------------------------- |
+| Dev server (run manually, long-running) | `npm run dev`                                               |
+| Fast checks                             | `npm run validate` (typecheck + lint + worlds + glb + unit) |
+| World libraries / exported models       | `npm run validate:worlds` / `npm run validate:glb`          |
+| Visual review (needs `vite preview`)    | `npm run review:visual`                                     |
+| Unit tests                              | `npm test`                                                  |
+| E2E (builds + serves `/CloudWorld/`)    | `npm run test:e2e`                                          |
+| Production build                        | `npm run build`                                             |
+| Milestone screenshot                    | `node scripts/capture.mjs <url> .screenshots/<name>.png`    |
 
 ## Conventions
 

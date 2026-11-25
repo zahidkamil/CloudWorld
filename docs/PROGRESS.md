@@ -27,6 +27,13 @@ the `world-builder` agent and the `create-world` Kiro Workflow are written. Mode
 WebGL 2 availability, Three.js frame rendering (frames, draw calls, triangles), theme switching,
 navigation and mode state, and camera drag. Only `@visual` pixel baselines are Chromium-only.
 
+## Start menu and Attack Path (added after Task 2)
+
+Start menu (World, Settings), world select, mission picker, saved defaults, locked Aqua card, and the Attack Path panel with a first real
+rule (open sensitive ports) are done. Attack paths across resources, more rules, and 3D finding markers stay in Task 9.
+Hooks added: visual review (Playwright MCP), Blender model review (Blender MCP), GLB validation on save. The `create-world` workflow now takes
+a plain description and deduces the world name.
+
 ## Notes
 
 - Reference images: `docs/images/City-Theme.jpeg`, `Haunted-Theme.jpeg`, `Aqua-Theme.png`, `Game.png`. Images are optional for new worlds (a written brief works).
