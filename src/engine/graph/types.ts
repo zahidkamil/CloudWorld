@@ -1,4 +1,4 @@
-import type { ResourceCategory } from '@/engine/registry/registry';
+import type { ResourceCategory, ResourceFamily } from '@/engine/registry/registry';
 import type { PlanAction } from '@/engine/terraform/types';
 
 export type PlacementScope = 'global' | 'region' | 'az' | 'unresolved';
@@ -36,6 +36,8 @@ export interface CloudResource {
   module?: string;
   index?: string | number;
   category: ResourceCategory;
+  /** Visual fallback family, resolved by a world's library if an exact model is absent. */
+  family: ResourceFamily;
   placement: Placement;
   /** Allowlisted, non-sensitive scalar attributes only. */
   attributes: Record<string, string | number | boolean>;

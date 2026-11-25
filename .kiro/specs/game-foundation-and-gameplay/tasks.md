@@ -23,9 +23,9 @@ Task numbers map to the global sequence in `docs/PROGRESS.md`.
   - [ ] 3.4 Relationship arcs: dotted parabolic arcs from the selected resource to dependencies and consumers (capped, theme-colored, reduced-motion safe) with a test on arc endpoints
   - _Requirements: R3, R4.1, R5.1, R5.2_
 
-- [ ] 4. Expanded registry and shared highlighting
-  - [ ] 4.1 Verify schemas/relationship fields with Terraform MCP; build tiered registry with validation tests
-  - [ ] 4.2 Highlight controller: primary, dependency, shared peer, type, dimmed
+- [x] 4. Expanded registry and shared highlighting
+  - [x] 4.1 Terraform MCP schema spot checks (ECS, EKS, CloudFront, WAFv2); tiered data registry covering the expanded catalog, service-family fallbacks, relationship metadata, validation tests
+  - [x] 4.2 Highlight controller: primary, dependency, shared peer, type, dimmed; type selection from the legend
   - _Requirements: R2.2–R2.4, R4_
 
 - [ ] 9. Defender rules

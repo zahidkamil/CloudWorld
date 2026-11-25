@@ -22,6 +22,7 @@ that I can see my own AWS infrastructure without credentials or a backend.
 - R2.1 The graph SHALL contain resources, edges (containment, reference, network, attachment), warnings, and topology, with no rendering fields.
 - R2.2 Every `aws_*` resource SHALL appear in the graph; unregistered types SHALL use the generic landmark.
 - R2.3 The registry SHALL define, per entry: types, category, placement scope, renderer tier, safe display attributes, relationship fields, and legend label.
+- R2.5 The registry SHALL expose a visual family (`compute`, `containers`, `serverless`, `database`, `storage`, `gateway`, `loadbalancer`, `edge`, `messaging`, `security`, `monitoring`, or `generic`) and safe relationship-field metadata for every exact entry. World libraries SHALL resolve exact type -> family -> generic.
 - R2.4 The registry SHALL cover the core set (VPC, subnet, route table, IGW, NAT, security group, EC2, load balancer, RDS, S3, Lambda, IAM) and the expanded set (ECS, EKS, Auto Scaling, API Gateway, CloudFront, DynamoDB, ElastiCache, EFS, EBS, SQS, SNS, Kinesis, EventBridge, Route 53, CloudWatch, KMS, Secrets Manager, WAF, VPC endpoints, Transit Gateway).
 
 ## R3 Topology
@@ -34,7 +35,8 @@ that I can see my own AWS infrastructure without credentials or a backend.
 
 - R4.1 WHEN a resource is selected THEN it SHALL be outlined and focused, and its direct dependencies highlighted.
 - R4.2 WHEN a resource is selected THEN resources sharing a security group, subnet, IAM role, target group, KMS key, or Terraform variable reference SHALL be highlighted as peers.
-- R4.3 Unrelated resources SHALL dim but remain visible.
+- R4.3 Unrelated resources SHALL dim to about 35% but remain visible.
+- R4.4 Selecting a resource type from the legend SHALL highlight every instance of that Terraform type, while the other resources dim.
 - R4.5 WHEN a resource is selected THEN the world SHALL draw dotted, animated arcs from it to its direct dependencies and to the resources that use it, with arrow-free direction shown by dash flow. Arcs SHALL be hidden for unrelated resources, recolored per world, and capped (e.g. 40) with a "+N more" label.
 - R4.4 Terraform variables SHALL NOT change relationships or security findings.
 

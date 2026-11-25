@@ -17,11 +17,14 @@ export interface CategoryGroup {
 export const CATEGORY_LABELS: Record<ResourceCategory, string> = {
   network: 'Networking',
   compute: 'Compute',
+  containers: 'Containers',
+  serverless: 'Serverless',
   storage: 'Storage',
   database: 'Database',
   security: 'Security and identity',
   integration: 'Messaging and integration',
   edge: 'Edge and DNS',
+  monitoring: 'Monitoring and logs',
   other: 'Other AWS resources',
 };
 

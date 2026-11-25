@@ -9,6 +9,7 @@ import { CameraRig, type FocusTarget } from './CameraRig';
 import { Decor } from './Decor';
 import { Island } from './Island';
 import { Landmark, type LandmarkLook } from './Landmark';
+import { ResourceLabel } from './ResourceLabel';
 import { landmarkKindOf, LANDMARK_HEIGHT, type LandmarkKind } from './landmarkKind';
 import type { ScenePalette } from './palette';
 
@@ -21,6 +22,7 @@ interface WorldSceneProps {
   palette: ScenePalette;
   highlights: Highlights;
   selectedId: string | null;
+  showLabels: boolean;
   focusId: string | null;
   focusNonce: number;
   fitNonce: number;
@@ -33,6 +35,9 @@ interface WorldSceneProps {
 
 interface Placed {
   id: string;
+  label: string;
+  name: string;
+  type: string;
   kind: LandmarkKind;
   x: number;
   z: number;
@@ -46,6 +51,7 @@ export function WorldScene({
   palette,
   highlights,
   selectedId,
+  showLabels,
   focusId,
   focusNonce,
   fitNonce,
@@ -78,6 +84,9 @@ export function WorldScene({
       return [
         {
           id: r.id,
+          label: r.label,
+          name: r.name,
+          type: r.type,
           kind: landmarkKindOf(r.type, r.category),
           x: lot.x,
           z: lot.z,
@@ -132,20 +141,34 @@ export function WorldScene({
         </group>
       ))}
 
-      {placed.map((p) => (
-        <Landmark
-          key={p.id}
-          id={p.id}
-          kind={p.kind}
-          x={p.x}
-          y={PAD_TOP}
-          z={p.z}
-          look={p.look}
-          state={highlights.states.get(p.id) ?? 'none'}
-          onSelect={onSelect}
-          onHover={onHover}
-        />
-      ))}
+      {placed.map((p) => {
+        const state = highlights.states.get(p.id) ?? 'none';
+        const labelVisible = showLabels || state === 'primary' || state === 'hover' || state === 'type';
+        return (
+          <group key={p.id}>
+            <Landmark
+              id={p.id}
+              kind={p.kind}
+              x={p.x}
+              y={PAD_TOP}
+              z={p.z}
+              look={p.look}
+              state={state}
+              onSelect={onSelect}
+              onHover={onHover}
+            />
+            <ResourceLabel
+              x={p.x}
+              y={topOf(p.id) + 0.85}
+              z={p.z}
+              type={p.label}
+              name={p.name}
+              state={state}
+              visible={labelVisible}
+            />
+          </group>
+        );
+      })}
 
       {selected && (
         <Beacon x={selected.x} z={selected.z} top={topOf(selected.id)} reducedMotion={reducedMotion} />

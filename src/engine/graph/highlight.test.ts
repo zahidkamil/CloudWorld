@@ -36,6 +36,14 @@ describe('computeHighlights', () => {
     expect(h.links.every((l) => l.from === ec2 && l.to !== ec2)).toBe(true);
   });
 
+  it('highlights every resource of a type from the legend and dims the rest', () => {
+    const h = computeHighlights(graph, null, null, 'aws_instance');
+    expect(h.states.get('aws_instance.web_east[0]')).toBe('type');
+    expect(h.states.get('aws_instance.web_east[1]')).toBe('type');
+    expect(h.states.get('aws_iam_role.app')).toBe('dim');
+    expect(h.links).toEqual([]);
+  });
+
   it('lets a dimmed resource light up on hover but keeps the selection primary', () => {
     expect(computeHighlights(graph, ec2, 'aws_iam_role.app').states.get('aws_iam_role.app')).toBe('hover');
     expect(computeHighlights(graph, ec2, ec2).states.get(ec2)).toBe('primary');

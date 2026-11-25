@@ -162,3 +162,39 @@
     display: none;
   }
 }
+
+.resource-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  max-width: 180px;
+  padding: 3px 7px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(7, 11, 22, 0.84);
+  color: #f8fafc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  font-size: 10px;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.resource-label__type {
+  color: #c4b5fd;
+  font-weight: 800;
+}
+.resource-label__name {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #e2e8f0;
+}
+.resource-label--primary {
+  border-color: #ffd479;
+  color: #fff;
+}
+.resource-label--type {
+  border-color: #a78bfa;
+}
+.resource-label--hover {
+  border-color: #fff;
+}

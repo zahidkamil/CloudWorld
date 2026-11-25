@@ -18,6 +18,7 @@ export interface MaterialLook {
 
 const HIGHLIGHT_GLOW: Record<HighlightState, number> = {
   primary: 0.38,
+  type: 0.32,
   dependency: 0.42,
   peer: 0.24,
   hover: 0.22,
@@ -28,6 +29,7 @@ const HIGHLIGHT_GLOW: Record<HighlightState, number> = {
 /** The colour a highlighted surface glows with. */
 export const HIGHLIGHT_COLOR: Record<HighlightState, string> = {
   primary: '#ffd479',
+  type: '#a78bfa',
   dependency: '#5eead4',
   peer: '#fde68a',
   hover: '#ffffff',

@@ -59,11 +59,14 @@ const BY_TYPE: Record<string, LandmarkKind> = {
 const BY_CATEGORY: Record<ResourceCategory, LandmarkKind> = {
   network: 'pad',
   compute: 'tower',
+  containers: 'tower',
+  serverless: 'pavilion',
   storage: 'silos',
   database: 'drum',
   security: 'vault',
   integration: 'mailbox',
   edge: 'mast',
+  monitoring: 'mast',
   other: 'block',
 };
 

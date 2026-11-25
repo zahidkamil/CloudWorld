@@ -81,7 +81,9 @@ export function GraphInspector() {
   const setGraph = useSession((s) => s.setGraph);
   const openImport = useSession((s) => s.openImport);
   const selectedId = useSelection((s) => s.selectedId);
+  const selectedType = useSelection((s) => s.selectedType);
   const select = useSelection((s) => s.select);
+  const selectType = useSelection((s) => s.selectType);
   const focusOn = useSelection((s) => s.focusOn);
   const [view, setView] = useState<ViewMode>('type');
   const [openMode, setOpenMode] = useState<{ mode: OpenMode; n: number }>({ mode: 'default', n: 0 });
@@ -227,6 +229,11 @@ export function GraphInspector() {
         ) : (
           <>
             <div className="inspector-toolbar">
+              {selectedType && (
+                <button type="button" className="inspector-clear-type" onClick={() => selectType(null)}>
+                  Clear type highlight
+                </button>
+              )}
               <div className="inspector-toggle" role="group" aria-label="Group resources">
                 <button
                   type="button"
@@ -264,8 +271,23 @@ export function GraphInspector() {
                     </summary>
                     {category.types.map((t) => (
                       <details key={t.type} open={typeOpen} className="inspector-section">
-                        <summary>
-                          {t.label} <span className="inspector-dim">{t.resources.length}</span>
+                        <summary className={selectedType === t.type ? 'is-type-selected' : ''}>
+                          <span>
+                            {t.label} <span className="inspector-dim">{t.resources.length}</span>
+                          </span>
+                          <button
+                            type="button"
+                            className={`inspector-type-highlight${selectedType === t.type ? ' is-active' : ''}`}
+                            aria-label={`Highlight all ${t.label}`}
+                            aria-pressed={selectedType === t.type}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              selectType(selectedType === t.type ? null : t.type);
+                            }}
+                          >
+                            {selectedType === t.type ? '✓' : '◇'}
+                          </button>
                         </summary>
                         <ul>
                           {t.resources.map((r) => (

@@ -18,6 +18,8 @@ const WorldStage = lazy(() => import('./WorldStage'));
 export function WorldShell() {
   const { mode, themeId, graph, setGraph, setMode, setTheme, returnToMenu } = useSession();
   const fit = useSelection((s) => s.fit);
+  const showLabels = useSelection((s) => s.showLabels);
+  const toggleLabels = useSelection((s) => s.toggleLabels);
   const inspectorWidth = usePanelLayout((s) => s.inspectorWidth);
   const setMissionPanelOpen = usePanelLayout((s) => s.setMissionPanelOpen);
   useEffect(() => {
@@ -71,6 +73,15 @@ export function WorldShell() {
         </div>
         <button type="button" className="hud-button" onClick={fit} title="Frame the whole world">
           Fit view
+        </button>
+        <button
+          type="button"
+          className={`hud-button${showLabels ? ' is-active' : ''}`}
+          aria-pressed={showLabels}
+          onClick={toggleLabels}
+          title="Show or hide resource labels"
+        >
+          Labels
         </button>
         <label className="hud-select">
           <span className="visually-hidden">Theme</span>

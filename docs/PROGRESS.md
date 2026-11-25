@@ -7,7 +7,7 @@ Source of truth for task status. Detailed subtasks live in `.kiro/specs/*/tasks.
 | 1   | Executable project and Kiro source of truth                  | ✅ Done                     |
 | 2   | Terraform ingestion, topology resolution, graph inspector    | ✅ Done                     |
 | 3   | Multi-region 3D vertical slice and early Pages build         | ✅ Done (awaiting approval) |
-| 4   | Expanded AWS registry, legend, shared highlighting           | —                           |
+| 4   | Expanded AWS registry, legend, shared highlighting           | ✅ Done (awaiting approval) |
 | 5   | World library system and Modern City (Blender MCP models)    | —                           |
 | 6   | Haunted World library (Blender MCP models)                   | —                           |
 | 7   | Game interface and synchronized navigation                   | —                           |
@@ -33,6 +33,11 @@ Start menu (World, Settings), world select, mission picker, saved defaults, lock
 rule (open sensitive ports) are done. Attack paths across resources, more rules, and 3D finding markers stay in Task 9.
 Hooks added: visual review (Playwright MCP), Blender model review (Blender MCP), GLB validation on save. The `create-world` workflow now takes
 a plain description and deduces the world name.
+
+## Task 4 summary
+
+- Registry now covers the requested ECS, EKS, API Gateway, CloudFront, DynamoDB, ElastiCache, EFS, EBS, SQS, SNS, Kinesis, EventBridge, Route 53, CloudWatch, KMS, Secrets Manager, WAFv2, VPC endpoint and Transit Gateway catalog, with exact service metadata and family fallbacks for unknown AWS types.
+- The resource legend can highlight every resource of one type. Hover / selected nameplates show `Type (name)`; the Labels button shows every resource nameplate.
 
 ## Task 3 summary
 

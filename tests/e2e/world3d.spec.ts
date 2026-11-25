@@ -108,3 +108,36 @@ test.describe('3D world from the graph', () => {
     await expect(canvas).toHaveAttribute('data-islands', '2');
   });
 });
+
+test.describe('legend highlighting and nameplates', () => {
+  test('shows Type (name) for hovered / selected resources and toggles every label', async ({ page }) => {
+    await enterWorld(page, 'Modern City');
+    const canvas = await ready(page);
+    await focusFromPanel(page, 'web-east-0');
+    const selectedLabel = page.locator('.resource-label--primary');
+    await expect(selectedLabel).toContainText('EC2 instance');
+    await expect(selectedLabel).toContainText('web-east-0');
+
+    await page.getByRole('button', { name: 'Labels' }).click();
+    await expect(page.getByRole('button', { name: 'Labels' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.resource-label')).toHaveCount(60);
+    await page.getByRole('button', { name: 'Labels' }).click();
+    await expect(page.getByRole('button', { name: 'Labels' })).toHaveAttribute('aria-pressed', 'false');
+    // Selection label remains after the all-label layer closes.
+    await expect(page.locator('.resource-label--primary')).toHaveCount(1);
+    await expect(canvas).toHaveAttribute('data-selected', EC2);
+  });
+
+  test('the legend highlights every resource of a selected type', async ({ page }) => {
+    await enterWorld(page, 'Haunted World');
+    const canvas = await ready(page);
+    const panel = page.getByLabel('Infrastructure');
+    await panel.getByRole('button', { name: 'Expand all' }).click();
+    await panel.getByRole('button', { name: 'Highlight all EC2 instance' }).click();
+    await expect(canvas).toHaveAttribute('data-selected', '');
+    await expect.poll(async () => (await canvas.getAttribute('data-highlights')) ?? '').toMatch(/type:5/);
+    await expect(page.getByRole('button', { name: 'Clear type highlight' })).toBeVisible();
+    await panel.getByRole('button', { name: 'Clear type highlight' }).click();
+    await expect(canvas).toHaveAttribute('data-highlights', '');
+  });
+});

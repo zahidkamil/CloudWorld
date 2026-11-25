@@ -209,3 +209,37 @@
 .graph-inspector code {
   overflow-wrap: anywhere;
 }
+
+.inspector-section summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.inspector-section summary.is-type-selected {
+  color: #c4b5fd;
+}
+.inspector-type-highlight {
+  flex: none;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #a5b4fc;
+  font-size: 0.85rem;
+}
+.inspector-type-highlight:hover,
+.inspector-type-highlight.is-active {
+  background: rgba(167, 139, 250, 0.24);
+  color: #ddd6fe;
+}
+.inspector-clear-type {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  border-radius: 7px;
+  background: rgba(76, 29, 149, 0.22);
+  color: #ddd6fe;
+  font-size: 0.78rem;
+  font-weight: 700;
+}

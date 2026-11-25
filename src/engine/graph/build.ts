@@ -64,6 +64,7 @@ export function buildGraph(plan: ParsedPlan): InfrastructureGraph {
       module: r.module,
       index: r.index,
       category: entry.category,
+      family: entry.family,
       placement: placements.get(r.address) ?? { scope: 'unresolved', source: 'no region information' },
       attributes: safeAttributes(r, entry.attributes),
       ...(openIngress ? { exposure: { openIngress } } : {}),

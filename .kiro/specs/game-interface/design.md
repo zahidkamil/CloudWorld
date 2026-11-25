@@ -16,7 +16,9 @@ src/ui/import/             ImportDialog (sample | upload | paste), PlanPreview
 
 - `useSession`: screen, mode, themeId.
 - `useWorld` (Task 2+): graph, import status. Replaced only on confirmed import.
-- `useSelection` (Task 3+): selectedId, hoveredId, highlightedType. Derived highlight sets are memoized selectors over precomputed graph indexes.
+- `useSelection` (Task 3+): `selectedId`, `selectedType`, `hoveredId`, camera focus request, and label-layer toggle. Derived highlight sets are memoized selectors over precomputed graph indexes.
+
+Nameplates use DOM `Html`, not TextGeometry: hover and selected state show `<Type> <name>`, while the labels toggle exposes all resource names. This stays readable and avoids creating a 3D text mesh per resource.
 
 The canvas and DOM read the same stores, so legend clicks and world clicks stay in sync.
 

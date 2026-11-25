@@ -54,6 +54,8 @@ export default function WorldStage({ themeId }: { themeId: string }) {
   const graph = useSession((s) => s.graph);
   const selectedId = useSelection((s) => s.selectedId);
   const hoveredId = useSelection((s) => s.hoveredId);
+  const selectedType = useSelection((s) => s.selectedType);
+  const showLabels = useSelection((s) => s.showLabels);
   const focus = useSelection((s) => s.focus);
   const fitNonce = useSelection((s) => s.fitNonce);
   const select = useSelection((s) => s.select);
@@ -67,8 +69,8 @@ export default function WorldStage({ themeId }: { themeId: string }) {
   // The layout depends on the graph only, never on the theme (themes must not change the infrastructure).
   const layout = useMemo(() => layoutGraph(graph ?? { resources: [], regions: [] }), [graph]);
   const highlights = useMemo(
-    () => (graph ? computeHighlights(graph, selectedId, hoveredId) : NO_HIGHLIGHTS),
-    [graph, selectedId, hoveredId],
+    () => (graph ? computeHighlights(graph, selectedId, hoveredId, selectedType) : NO_HIGHLIGHTS),
+    [graph, selectedId, hoveredId, selectedType],
   );
   const selectedKnown = graph?.resources.some((r) => r.id === selectedId) ?? false;
   const highlightCounts = useMemo(() => {
@@ -102,6 +104,7 @@ export default function WorldStage({ themeId }: { themeId: string }) {
         palette={palette}
         highlights={highlights}
         selectedId={selectedKnown ? selectedId : null}
+        showLabels={showLabels}
         focusId={focus?.id ?? null}
         focusNonce={focus?.nonce ?? 0}
         fitNonce={fitNonce}
