@@ -1,7 +1,7 @@
 ---
 id: modern-city
 name: Modern City
-status: planned
+status: built
 reference_images:
   - docs/images/City-Theme.jpeg
 ui_reference: docs/images/Game.png
@@ -9,13 +9,18 @@ ui_reference: docs/images/Game.png
 
 # Modern City
 
-A bright, clean, isometric city diorama. Pastel stone towers, cherry-blossom trees, a river with a
-stone arch bridge, and a floating grass-and-earth slab. Calm and friendly, easy to read from above.
+A bright, vivid US downtown in the spirit of Manhattan, on floating grass-and-earth slabs. Red-brick
+walk-ups with fire escapes and water towers, limestone mid-rises, art-deco skyscrapers and glass
+supertalls share avenues with yellow cabs, food carts, cafés and shop rows. Calm and friendly by day,
+neon and lit windows at night. Easy to read from above.
 
 ## Concept
 
-Infrastructure as a living city. Regions are floating city slabs, AZs are blocks separated by streets
-and the river, resources are buildings and street furniture.
+Infrastructure as a living downtown. Regions are floating city slabs, AZs are blocks ringed by avenues and
+sidewalks, resources are buildings and street furniture. Building size tells you the machine size: an EC2
+`t3.micro` is a walk-up, an `m5.large` is an art-deco skyscraper, a `2xlarge` is a supertall. Databases
+are big round landmarks (a copper-domed rotunda for RDS, a tank refinery for DynamoDB). Serverless is a
+food truck that only opens when invoked.
 
 ## Reference image notes
 
@@ -57,14 +62,18 @@ Orbit limited to keep the slab visible. Zoom between whole-slab and street-level
 
 ## Ground and props
 
-- Roads and crosswalks as a tiled network between lots; sidewalks with paving pattern.
-- Repeatable props: round trees, blossom trees, hedges, street lamps, benches, cars, truck, boats.
-- Ambient animation: slow car traffic on loops, gentle water shimmer, blossom petals (very sparse).
-- Props are decoration. They never represent AWS resources.
+- Every district gets a ring avenue (asphalt, yellow lane dashes, white crosswalks), a pale sidewalk,
+  globe street lamps and round street trees. Colours live in `library.json` `streets`.
+- Props from `library.json` `props`: yellow cabs on the avenues, hot-dog carts on the sidewalks, and a café
+  or shop row on every empty lot. Placement is deterministic from the layout.
+- Props are decoration. They never represent AWS resources and are not selectable.
 
 ## Model style guide
 
-- Budget: 1,500 triangles per landmark (3,000 for key services), one 512 px texture atlas per world
-  plus flat colours, max 3 materials per model.
-- 1 unit = 1 metre. Footprint of a landmark about 8 x 8 units. Pivot at base centre, +Y up.
-- Export GLB, mesh-opt or Draco compressed. Names must match `resources.md` file names.
+- Built with the shared kit `worlds/_shared/blender/cw_kit.py`: Blender Z up, exported with `+Y up`, so
+  models stand upright in three.js with no extra rotation.
+- Three materials at most: `paint` (vertex colours), `glow` (warm windows `#ffd479`), `neon` (cyan
+  `#5ff0e6`). Meshes joined per material: three draw calls per model.
+- Budget: about 1,500 triangles per landmark, 3,000 for hero services. Draco compressed, under 40 KB each.
+- 1 unit = 1 metre in Blender, footprint about 5.8 x 5.8, pivot at base centre. `library.json` scales
+  landmarks by 0.42 so they fit a 3.2 m lot. Heights are measured at export and stored per model.

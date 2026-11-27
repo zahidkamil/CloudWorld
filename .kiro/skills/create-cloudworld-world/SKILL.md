@@ -50,30 +50,61 @@ run the full test suite. You can also follow the same steps by hand with `/creat
 2. **Study the style source.** Read each reference image with `read_file` (if there is one). Fill in `world.md`: concept, notes per image
    (what to copy, what to ignore), palette with hex values, lighting, camera, ground and props, model
    style guide. Be concrete. Another person should be able to model from it.
-3. **Write the resource list.** Fill `resources.md`. Every entry is one line:
+3. **Write the resource list with vivid imagery.** Fill `resources.md`. Every entry is one line:
    ``- `<key>` | model: `<file>.glb` | planned | <how it looks>``.
    - Required: 4 `structure:*` entries and 12 `family:*` entries.
-   - Add about 10 key services (EC2, S3, RDS, Lambda, load balancer, NAT, internet gateway,
+   - Add about 10 key services (EC2, S3, RDS, DynamoDB, Lambda, load balancer, NAT, internet gateway,
      security group, IAM role, KMS) so the most recognizable resources stand out.
-   - Describe silhouette, materials, colours, details. Keep each look consistent with the reference.
+   - Add the four EC2 size tiers `aws_instance.tiny|small|large|huge`. The renderer picks one from
+     `instance_type`, so a `t3.micro` and an `m5.2xlarge` look clearly different (for example a walk-up versus a
+     supertall, or a cottage versus a castle).
+   - Add 3 to 5 `prop:*` entries for street life (vehicles on the lanes, carts or pumpkins on the sidewalks,
+     shops or graveyards on empty lots). Props are decoration and never stand for resources.
+   - **Every look is vivid, concrete imagery (40+ characters; the validator enforces it).** Imagine the place
+     first: what kind of town or realm is this, who lives there, what is lit at night? Then write each resource
+     as a small scene: silhouette (tiers, roofs, towers, domes), materials and colours from the palette, three
+     or four signature details, what glows, and a short metaphor for the AWS job ("a food truck that opens only
+     when invoked", "a sealed crypt whose iron key never leaves"). Databases are big and round or industrial
+     (domes, rotundas, tank farms, cauldrons). Plumbing (route tables, associations, EIPs) is small street
+     furniture. `worlds/modern-city/resources.md` and `worlds/haunted-world/resources.md` are the examples to
+     match.
+   - Keep each look consistent with the reference and distinct from every other world: new silhouettes, never a
+     recolour of another world's model.
    - Let the user adjust the list before building models. This list is where users say how each AWS
      resource should look in their world.
 4. **Validate the text.** Run `npm run validate:worlds`. Fix every error.
 5. **Check Blender.** The save hook `validate-glb-on-save` and the `blender-model-review` hook describe the checks. Call `blender/get_scene_info` (always allowed). Then `get_addon_status` and
    `execute_blender_code` need approval under the current permissions. Ask once for exactly what is needed.
    Never edit `permissions.yaml` or broaden permissions.
-6. **Build models with the Blender MCP.** Save reusable scripts in `worlds/<id>/blender/`. For each entry
-   in `resources.md`:
-   - Build or refine the model with `execute_blender_code`. Respect the world's triangle budget, scale
-     (1 unit = 1 m), pivot at base centre, +Y up, max 3 materials. Share materials between models.
-   - Look at it with `look` from at least two angles. Compare with the reference. Fix obvious problems.
-   - Export `public/worlds/<id>/models/<file>.glb` (apply modifiers, no cameras or lights, Draco or
-     meshopt compression, no unused data). Target under 150 KB per model, under 3 MB per world.
-   - Change the entry status from `planned` to `built`.
-     Build `family:*` and `structure:*` entries first, then key services. A missing model is allowed while
-     the world is `in-progress`; the renderer falls back to a procedural shape.
-7. **Write `public/worlds/<id>/library.json`.** Maps each key to `{ file, scale, yOffset }` and holds the
-   palette, lighting, fog, camera, and prop settings from `world.md`. Keep values in sync with the doc.
+6. **Build models with the Blender MCP.** Write `worlds/<id>/blender/build_library.py` using the shared kit
+   `worlds/_shared/blender/cw_kit.py` (copy the structure of `worlds/haunted-world/blender/build_library.py`):
+   one factory function per model file, a `MODELS` map from resource key to `(file, scale)`, a `PROPS` list,
+   then `kit.build_all(...)` and the `library.json` write. Run it with `execute_blender_code`
+   (`exec(compile(open(p).read(), p, 'exec'))`, stdout redirected; print only the export table).
+   Kit conventions, checked by `npm run validate:glb`:
+   - Blender Z is up and fronts face -Y. The exporter writes glTF +Y up, so models stand upright in the app
+     with no extra rotation.
+   - 1 unit = 1 m, pivot at base centre, footprint about 5.8 x 5.8 (the app scales landmarks by about 0.42 to
+     fit a 3.2 m lot). Budget about 1,500 triangles per landmark, 2,500 for a hero model.
+   - At most three materials, shared by every model: `paint` (vertex colours carry every painted colour),
+     `glow` (warm emissive) and `neon` (accent emissive). Meshes are joined per material, so a model costs at
+     most three draw calls. Keep emissive strength near 1 so colours stay saturated after tone mapping.
+   - Draco compression (the app self-hosts the decoder in `public/draco/`), no UVs, cameras, lights or
+     textures. Aim for under 40 KB per model, 3 MB per world.
+   - For each model, import the exported GLBs into a lineup and `look` from at least two angles. Compare with
+     the reference and the `resources.md` imagery. Fix obvious problems.
+   - Change each entry status from `planned` to `built`.
+     Build `family:*` and `structure:*` entries first, then key services, tiers and props. A missing model is
+     allowed while the world is `in-progress`; the renderer falls back to a procedural shape.
+7. **Write `public/worlds/<id>/library.json`** (the build script does this). It holds:
+   - `models`: each key to `{ file, scale, yOffset, height }`. `height` is measured at export; labels and the
+     selection beacon sit above it.
+   - `scene` (and optional `nightScene`): background, ground, earth, base, roof, accent, glow, sky and ground
+     light, key light and intensities, decor, fog. The renderer reads these, so no palette lives in code.
+   - `streets`: road, sidewalk, optional lane marking and crosswalk, lamp post and glow, `lightPools` for dark
+     worlds, optional street-tree colours. Every district gets a ring road with these colours.
+   - `props`: `[{ file, placement: road|sidewalk|lot, perDistrict, scale }]`, placed deterministically.
+   - camera and lighting settings from `world.md`. Keep values in sync with the doc.
 8. **Register the world** in `src/themes/worlds.ts` (`ALL_WORLDS`: name, tagline, blurb, accent colour, `available: true`). Its card shows
    `public/worlds/<id>/preview.webp`.
 9. **Verify in the app.** Run `npm run build`, serve it, and use Playwright (MCP or `scripts/capture.mjs`)
@@ -89,13 +120,15 @@ run the full test suite. You can also follow the same steps by hand with `/creat
 - Blender is development-only. Judges never need it.
 - Do not change another world's files while creating a new one.
 - Keep descriptions in `resources.md` current if a model changes.
+- Never share or copy a model file from another world.
 - Never include API keys, personal paths, or secrets in a world library.
 
 ## Quick checklist
 
 - [ ] `reference_images` lists real files in `docs/images/`, or `brief:` describes the look
 - [ ] 4 `structure:*` and 12 `family:*` entries present
-- [ ] Key services described
+- [ ] Key services, the four EC2 size tiers and 3 to 5 props described with vivid imagery
+- [ ] No model file shared with another world
 - [ ] `npm run validate:worlds` passes
 - [ ] GLBs exported, statuses `built`
 - [ ] `library.json` written and registered

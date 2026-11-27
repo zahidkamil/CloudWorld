@@ -1,4 +1,4 @@
-/** Colours and light settings a world supplies to the shared renderer. Library files (Tasks 5 and 6) provide the real values. */
+/** Colours and light settings a world supplies to the shared renderer. World libraries provide them as `scene` and `nightScene` in library.json. */
 export interface ScenePalette {
   background: string;
   ground: string;
@@ -19,4 +19,6 @@ export interface ScenePalette {
   fillIntensity: number;
   /** Small props around island edges. */
   decor: 'blossom' | 'pine';
+  /** Fog density multiplier (1 = default distance fog). */
+  fog?: number;
 }

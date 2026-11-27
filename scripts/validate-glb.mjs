@@ -1,7 +1,9 @@
 // Validates exported world models (GLB) without Blender.
 // Usage: node scripts/validate-glb.mjs [file.glb ...]   (no args = every GLB under public/worlds)
 // Checks: valid GLB header, size budgets, triangle budget, material count, no cameras/lights,
-// and that each GLB is listed in worlds/<id>/resources.md. Exit code 1 on any failure.
+// that each GLB is listed in worlds/<id>/resources.md, and that no two worlds ship the same model.
+// Exit code 1 on any failure.
+import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 
@@ -106,6 +108,8 @@ function main() {
   }
   let failed = false;
   const worldBytes = new Map();
+  /** Model content hash -> world that ships it. Worlds must never share models. */
+  const owners = new Map();
   for (const file of files) {
     const rel = relative(root, file).split(sep);
     // public/worlds/<id>/models/<file>.glb
@@ -113,7 +117,16 @@ function main() {
     const listed = worldId ? modelsListedIn(join(root, 'worlds', worldId, 'resources.md')) : undefined;
     const buffer = readFileSync(file);
     const errors = checkModel(file, buffer, listed);
-    if (worldId) worldBytes.set(worldId, (worldBytes.get(worldId) ?? 0) + buffer.length);
+    if (worldId) {
+      worldBytes.set(worldId, (worldBytes.get(worldId) ?? 0) + buffer.length);
+      const hash = createHash('sha256').update(buffer).digest('hex');
+      const owner = owners.get(hash);
+      if (owner && owner.worldId !== worldId) {
+        errors.push(
+          `${basename(file)}: identical to ${owner.file} from ${owner.worldId}. Worlds must not share models`,
+        );
+      } else if (!owner) owners.set(hash, { worldId, file: basename(file) });
+    }
     if (errors.length) {
       failed = true;
       for (const e of errors) console.error(`FAIL ${e}`);

@@ -1,7 +1,7 @@
 ---
 id: haunted-world
 name: Haunted World
-status: planned
+status: built
 reference_images:
   - docs/images/Haunted-Theme.jpeg
 ui_reference: docs/images/Game.png
@@ -9,13 +9,17 @@ ui_reference: docs/images/Game.png
 
 # Haunted World
 
-A hand-painted, stylized gothic courtyard at night. Cobblestone, blue slate roofs, warm orange windows,
-pumpkins, candles, tombstones, and drifting teal ghost light. Moody but friendly, not gory.
+A dark, vivid vampire estate at night. Lonely gothic houses stand apart from each other: crooked
+cottages, Victorian houses with witch-hat turrets, gated manors and Dracula's castle on its rock. Blue
+slate roofs and blue-grey stone glow with orange windows and lanterns; teal ghost light rises from
+graveyards and cauldrons. Moody, high contrast and friendly, never gory.
 
 ## Concept
 
-Infrastructure as a haunted village. Regions are raised courtyard platforms, AZs are walled terraces,
-resources are houses, crypts, lanterns and monuments.
+Infrastructure as a vampire estate. Regions are floating estates, AZs are walled grounds ringed by
+cobbled lanes with orange lantern pools, resources are houses, crypts and monuments. House size tells you
+the machine size: an EC2 `t3.micro` is a crooked cottage, an `m5.large` a gated manor, a `2xlarge` is
+Dracula's castle. Databases are round crypt towers and bubbling cauldron breweries.
 
 ## Reference image notes
 
@@ -55,15 +59,19 @@ on the far side like the reference. Orbit and zoom limits keep the platform edge
 
 ## Ground and props
 
-- Cobblestone tiles with fan and ring patterns, stone steps, low walls, chain fences.
-- Repeatable props: pumpkins, tombstones, candles, bare trees, lamp posts, bats, ghosts, crates, barrels.
-- Ambient animation: window flicker, candle flame, ghost wisp drift, fog drift, occasional bat.
-- Props are decoration. They never represent AWS resources.
+- Every district gets a ring of cobbled lane (`#3a3748`) and frosty stone sidewalk (`#77788f`), iron lamp
+  posts with orange lanterns and soft orange light pools on the ground. No lane paint, no street trees.
+  Colours live in `library.json` `streets`.
+- Props from `library.json` `props`: a hearse on the lanes, pumpkin heaps and small ghosts on the
+  sidewalks, and a little graveyard or a dead tree with fairy lights on every empty lot.
+- Props are decoration. They never represent AWS resources and are not selectable.
 
 ## Model style guide
 
-- Budget: 2,000 triangles per landmark (4,000 for key services), one 512 px painted atlas per world,
-  max 3 materials per model. Hand-painted look: baked colour variation, no photoreal textures.
-- 1 unit = 1 metre. Footprint of a landmark about 8 x 8 units. Pivot at base centre, +Y up.
-- Emissive materials only for windows, candles, lanterns and ghost light.
-- Export GLB, mesh-opt or Draco compressed. Names must match `resources.md` file names.
+- Built with the shared kit `worlds/_shared/blender/cw_kit.py`: Blender Z up, exported `+Y up`, models
+  stand upright with no extra rotation. Fronts face -Y in Blender (toward the camera in the app).
+- Three materials at most: `paint` (vertex colours), `glow` (orange `#ff9a3c`: windows, lanterns,
+  candles, jack-o'-lanterns) and `neon` (teal `#52e0d0`: ghost light, runes, cauldrons).
+- Budget: about 1,500 triangles per landmark, 2,500 for the castle. Draco compressed, under 25 KB each.
+- 1 unit = 1 metre in Blender, footprint about 5.8 x 5.8, pivot at base centre, scaled 0.42 in the app.
+- Original geometry only; no file is shared with Modern City.

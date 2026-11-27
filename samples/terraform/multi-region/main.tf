@@ -72,7 +72,7 @@ resource "aws_kms_key" "east" {
 resource "aws_instance" "web_east" {
   count                  = 3
   ami                    = local.ami
-  instance_type          = "t3.micro"
+  instance_type          = ["t3.micro", "m5.large", "m5.2xlarge"][count.index]
   availability_zone      = local.east_azs[count.index]
   subnet_id              = module.network_east.private_subnet_ids[count.index]
   vpc_security_group_ids = [aws_security_group.web_east.id]
@@ -163,7 +163,7 @@ resource "aws_instance" "web_west" {
   provider               = aws.west
   count                  = 2
   ami                    = local.ami
-  instance_type          = "t3.micro"
+  instance_type          = ["t3.small", "c6i.xlarge"][count.index]
   availability_zone      = local.west_azs[count.index]
   subnet_id              = module.network_west.private_subnet_ids[count.index]
   vpc_security_group_ids = [aws_security_group.web_west.id]

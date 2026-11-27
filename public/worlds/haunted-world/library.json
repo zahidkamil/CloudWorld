@@ -1,0 +1,328 @@
+{
+  "version": 1,
+  "id": "haunted-world",
+  "name": "Haunted World",
+  "referenceImages": ["docs/images/Haunted-Theme.jpeg"],
+  "palette": {
+    "sky": "#141a3a",
+    "ground": "#4f4a68",
+    "earth": "#2c2640",
+    "base": "#5b5f78",
+    "roof": "#2f3d7d",
+    "accent": "#ff8a2b",
+    "glow": "#ffb454"
+  },
+  "scene": {
+    "background": "#141a3a",
+    "ground": "#4f4a68",
+    "earth": "#2c2640",
+    "base": "#5b5f78",
+    "roof": "#2f3d7d",
+    "accent": "#ff8a2b",
+    "glow": "#ffb454",
+    "skyLight": "#7686e0",
+    "groundLight": "#241d40",
+    "keyLight": "#a9b9ff",
+    "keyIntensity": 2.3,
+    "fillIntensity": 1.05,
+    "decor": "pine",
+    "fog": 0.9
+  },
+  "streets": {
+    "road": "#3a3748",
+    "sidewalk": "#77788f",
+    "lampPost": "#1f1e27",
+    "lampGlow": "#ff9a3c",
+    "lightPools": true
+  },
+  "lighting": {
+    "preset": "night"
+  },
+  "camera": {
+    "elevation": 40,
+    "yaw": 45,
+    "minDistance": 7,
+    "maxDistance": 140
+  },
+  "models": {
+    "structure:region": {
+      "file": "models/region-gargoyle.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.09
+    },
+    "structure:az": {
+      "file": "models/az-lamp-shrine.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 0.97
+    },
+    "structure:vpc": {
+      "file": "models/vpc-wall-gate.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.28
+    },
+    "structure:subnet": {
+      "file": "models/subnet-graveyard.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.02
+    },
+    "family:compute": {
+      "file": "models/ec2-victorian-house.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.94
+    },
+    "family:containers": {
+      "file": "models/containers-mausoleum-row.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.51
+    },
+    "family:serverless": {
+      "file": "models/lambda-wisp-lantern.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.7
+    },
+    "family:database": {
+      "file": "models/rds-moon-crypt.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.68
+    },
+    "family:storage": {
+      "file": "models/s3-pumpkin-cellar.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.09
+    },
+    "family:gateway": {
+      "file": "models/igw-castle-gate.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.29
+    },
+    "family:loadbalancer": {
+      "file": "models/lb-crossroads-gallows.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.21
+    },
+    "family:edge": {
+      "file": "models/edge-bell-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 5.96
+    },
+    "family:messaging": {
+      "file": "models/messaging-raven-tree.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.23
+    },
+    "family:security": {
+      "file": "models/kms-crypt-vault.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.93
+    },
+    "family:monitoring": {
+      "file": "models/monitoring-angel-statue.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.26
+    },
+    "family:generic": {
+      "file": "models/generic-tombstone.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.51
+    },
+    "aws_instance": {
+      "file": "models/ec2-victorian-house.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.94
+    },
+    "aws_instance.tiny": {
+      "file": "models/ec2-crooked-cottage.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.28
+    },
+    "aws_instance.small": {
+      "file": "models/ec2-victorian-house.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.94
+    },
+    "aws_instance.large": {
+      "file": "models/ec2-gated-manor.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 5.42
+    },
+    "aws_instance.huge": {
+      "file": "models/ec2-dracula-castle.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 7.85
+    },
+    "aws_s3_bucket": {
+      "file": "models/s3-pumpkin-cellar.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.09
+    },
+    "aws_db_instance": {
+      "file": "models/rds-moon-crypt.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.68
+    },
+    "aws_dynamodb_table": {
+      "file": "models/dynamodb-cauldron-brewery.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.52
+    },
+    "aws_lambda_function": {
+      "file": "models/lambda-wisp-lantern.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.7
+    },
+    "aws_lb": {
+      "file": "models/lb-crossroads-gallows.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.21
+    },
+    "aws_nat_gateway": {
+      "file": "models/nat-iron-gate.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.57
+    },
+    "aws_internet_gateway": {
+      "file": "models/igw-castle-gate.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.29
+    },
+    "aws_security_group": {
+      "file": "models/sg-spiked-fence.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 0.75
+    },
+    "aws_iam_role": {
+      "file": "models/iam-banner-standard.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.14
+    },
+    "aws_kms_key": {
+      "file": "models/kms-crypt-vault.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.93
+    },
+    "aws_sqs_queue": {
+      "file": "models/messaging-raven-tree.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.23
+    },
+    "aws_route53_zone": {
+      "file": "models/edge-bell-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 5.96
+    },
+    "aws_vpc": {
+      "file": "models/vpc-wall-gate.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.28
+    },
+    "aws_subnet": {
+      "file": "models/subnet-graveyard.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.02
+    },
+    "aws_route_table": {
+      "file": "models/signpost-crooked.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 1.17
+    },
+    "aws_route_table_association": {
+      "file": "models/candle-cluster.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 0.34
+    },
+    "aws_lb_target_group_attachment": {
+      "file": "models/candle-cluster.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 0.34
+    },
+    "aws_db_subnet_group": {
+      "file": "models/candle-cluster.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 0.34
+    },
+    "aws_eip": {
+      "file": "models/lantern-post.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 1.1
+    },
+    "aws_lb_target_group": {
+      "file": "models/coffin-row.glb",
+      "scale": 0.38,
+      "yOffset": 0,
+      "height": 0.57
+    }
+  },
+  "props": [
+    {
+      "file": "models/prop-hearse.glb",
+      "placement": "road",
+      "perDistrict": 1,
+      "scale": 0.36
+    },
+    {
+      "file": "models/prop-pumpkin-patch.glb",
+      "placement": "sidewalk",
+      "perDistrict": 2,
+      "scale": 0.42
+    },
+    {
+      "file": "models/prop-ghost.glb",
+      "placement": "sidewalk",
+      "perDistrict": 1,
+      "scale": 0.4
+    },
+    {
+      "file": "models/prop-graveyard.glb",
+      "placement": "lot",
+      "perDistrict": 1,
+      "scale": 0.5
+    },
+    {
+      "file": "models/prop-dead-tree.glb",
+      "placement": "lot",
+      "perDistrict": 1,
+      "scale": 0.55
+    }
+  ],
+  "preview": "preview.webp"
+}

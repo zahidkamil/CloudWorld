@@ -29,20 +29,46 @@ scripts/validate-worlds.mjs   instruction-set validator (npm run validate:worlds
     "accent": "#f3a6c8",
     "glow": "#ffd479"
   },
-  "lighting": { "preset": "day", "presets": { "day": {}, "night": {} } },
-  "camera": { "elevation": 35, "yaw": 45, "minDistance": 8, "maxDistance": 80 },
-  "models": { "aws_instance": { "file": "models/ec2-instance.glb", "scale": 1, "yOffset": 0 } },
-  "props": { "trees": "models/tree-round.glb" },
+  "scene": {
+    "background": "#bfe6fb",
+    "ground": "#7bc043",
+    "keyIntensity": 2.4,
+    "decor": "blossom",
+    "fog": 1
+  },
+  "nightScene": { "background": "#07142d", "glow": "#7df9ff", "keyIntensity": 1.0 },
+  "streets": {
+    "road": "#3a3d4a",
+    "sidewalk": "#dcd5c6",
+    "marking": "#f2c94c",
+    "lampPost": "#4a5563",
+    "lampGlow": "#ffd479"
+  },
+  "lighting": { "preset": "day" },
+  "camera": { "elevation": 36, "yaw": 45, "minDistance": 7, "maxDistance": 140 },
+  "models": {
+    "aws_instance": { "file": "models/ec2-midrise.glb", "scale": 0.42, "yOffset": 0, "height": 4.96 },
+    "aws_instance.huge": { "file": "models/ec2-supertall.glb", "scale": 0.42, "yOffset": 0, "height": 11.68 }
+  },
+  "props": [{ "file": "models/prop-yellow-cab.glb", "placement": "road", "perDistrict": 3, "scale": 0.34 }],
   "preview": "preview.webp"
 }
 ```
+
+(`scene` and `nightScene` list every `ScenePalette` field in the real files; shortened here.)
 
 Keys match `resources.md`. Models load lazily with `useGLTF`, are cached, and repeated props use `InstancedMesh`.
 A missing file falls back to a procedural shape coloured from the palette, so a partially built world still runs.
 
 ## Resolution
 
-`resolve(type)`: `models[type]` -> `models['family:' + registry.family]` -> `models['family:generic']` -> procedural.
+`resolveLibraryModel(library, type, family, attributes)`: `models[type + '.' + sizeTier(instance_type)]` -> `models[type]` ->
+`models['family:' + family]` -> `models['family:generic']` -> procedural. Size tiers: nano/micro tiny, small/medium small,
+large/xlarge large, 2xlarge+ or metal huge.
+
+Streets and props are drawn by `themes/kits/streets` from `library.streets` and `library.props`: a pure `planStreets`
+(ring road, sidewalk, lane dashes, crosswalks, lamps, trees) and `placeProps` (road, sidewalk, empty-lot slots), all
+instanced, so the whole world's street dressing costs a few dozen draw calls.
 Structure keys (`structure:region|az|vpc|subnet`) are used by the layout for slabs, districts, boundaries, and lots.
 
 ## Region and AZ variation

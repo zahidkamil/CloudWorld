@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { loadWorldLibrary, type WorldLibrary } from '@/themes/library';
 import { useSelection } from '@/app/selection';
 import { useSession } from '@/app/store';
 import { computeHighlights, NO_HIGHLIGHTS } from '@/engine/graph/highlight';
@@ -9,7 +10,7 @@ import { WorldScene } from '@/engine/render/WorldScene';
 import { fitDistance } from '@/engine/render/cameraView';
 import { insetsFor, usePanelLayout } from './panelLayout';
 
-/** Interim palettes that echo each reference image until the Blender libraries replace them (Tasks 5 and 6). */
+/** Loading fallbacks. The real palettes live in public/worlds/<id>/library.json (`scene`, `nightScene`). */
 const PALETTES: Record<string, ScenePalette> = {
   'modern-city': {
     background: '#bfe6fb',
@@ -27,19 +28,20 @@ const PALETTES: Record<string, ScenePalette> = {
     decor: 'blossom',
   },
   'haunted-world': {
-    background: '#1b2347',
-    ground: '#675f7e',
-    earth: '#3a3550',
-    base: '#6b7090',
-    roof: '#3c4f9c',
-    accent: '#ff9a3c',
+    background: '#141a3a',
+    ground: '#4f4a68',
+    earth: '#2c2640',
+    base: '#5b5f78',
+    roof: '#2f3d7d',
+    accent: '#ff8a2b',
     glow: '#ffb454',
-    skyLight: '#8896e0',
-    groundLight: '#3a3366',
-    keyLight: '#b4c3ff',
-    keyIntensity: 2.1,
-    fillIntensity: 1.1,
+    skyLight: '#7686e0',
+    groundLight: '#241d40',
+    keyLight: '#a9b9ff',
+    keyIntensity: 2.3,
+    fillIntensity: 1.05,
     decor: 'pine',
+    fog: 0.9,
   },
 };
 
@@ -52,6 +54,7 @@ function prefersReducedMotion(): boolean {
 /** Lazily loaded so three.js stays out of the menu bundle. Connects the stores to the shared scene. */
 export default function WorldStage({ themeId }: { themeId: string }) {
   const graph = useSession((s) => s.graph);
+  const lightingPreset = useSession((s) => s.lightingPreset);
   const selectedId = useSelection((s) => s.selectedId);
   const hoveredId = useSelection((s) => s.hoveredId);
   const selectedType = useSelection((s) => s.selectedType);
@@ -61,10 +64,29 @@ export default function WorldStage({ themeId }: { themeId: string }) {
   const select = useSelection((s) => s.select);
   const hover = useSelection((s) => s.hover);
   const [reducedMotion] = useState(prefersReducedMotion);
+  const [library, setLibrary] = useState<WorldLibrary | null>(null);
   const inspectorWidth = usePanelLayout((s) => s.inspectorWidth);
   const missionPanelOpen = usePanelLayout((s) => s.missionPanelOpen);
   const insets = insetsFor({ inspectorWidth, missionPanelOpen }, window.innerWidth);
-  const palette = PALETTES[themeId] ?? PALETTES['modern-city']!;
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadWorldLibrary(themeId).then((next) => {
+      if (!cancelled) setLibrary(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [themeId]);
+
+  const activeLibrary = library?.id === themeId ? library : null;
+  const libraryStatus = activeLibrary ? 'loaded' : 'loading';
+  // Each world library owns its palettes. The fallbacks only show while library.json loads.
+  const palette: ScenePalette =
+    (lightingPreset === 'night' ? activeLibrary?.nightScene : undefined) ??
+    activeLibrary?.scene ??
+    PALETTES[themeId] ??
+    PALETTES['modern-city']!;
 
   // The layout depends on the graph only, never on the theme (themes must not change the infrastructure).
   const layout = useMemo(() => layoutGraph(graph ?? { resources: [], regions: [] }), [graph]);
@@ -91,6 +113,7 @@ export default function WorldStage({ themeId }: { themeId: string }) {
       maxDistance={fitDistance(layout.bounds.radius) * 1.8}
       onMissed={() => select(null)}
       dataAttrs={{
+        'data-library': libraryStatus,
         'data-selected': selectedKnown ? (selectedId ?? '') : '',
         'data-hovered': hoveredId ?? '',
         'data-highlights': highlightCounts,
@@ -100,10 +123,12 @@ export default function WorldStage({ themeId }: { themeId: string }) {
     >
       <WorldScene
         graph={graph}
+        library={activeLibrary}
         layout={layout}
         palette={palette}
         highlights={highlights}
         selectedId={selectedKnown ? selectedId : null}
+        hoveredId={hoveredId}
         showLabels={showLabels}
         focusId={focus?.id ?? null}
         focusNonce={focus?.nonce ?? 0}

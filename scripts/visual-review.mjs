@@ -105,6 +105,8 @@ async function reviewWorld(browser, baseUrl, world) {
     { timeout: 30_000 },
   );
   check('landmarks drawn for every resource', (await canvas.getAttribute('data-landmarks')) === '60');
+  // Every playable world ships a Blender model library (public/worlds/<id>/library.json).
+  check(`${world.id} library loaded`, (await canvas.getAttribute('data-library')) === 'loaded');
   check('WebGL 2 frames drawn', (await canvas.getAttribute('data-webgl')) === '2');
   check('draw calls reported', Number(await canvas.getAttribute('data-draw-calls')) > 0);
 

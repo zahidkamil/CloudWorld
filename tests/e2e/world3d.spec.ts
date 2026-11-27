@@ -5,10 +5,11 @@ import { enterWorld, loadSample } from './helpers';
 
 const EC2 = 'aws_instance.web_east[0]';
 
-async function ready(page: Page) {
+async function ready(page: Page, expectLibrary = false) {
   const canvas = page.getByTestId('world-canvas');
   await expect(canvas).toHaveAttribute('data-ready', 'true', { timeout: 30_000 });
   await expect(canvas).toHaveAttribute('data-landmarks', '60', { timeout: 30_000 });
+  if (expectLibrary) await expect(canvas).toHaveAttribute('data-library', 'loaded', { timeout: 30_000 });
   await expect
     .poll(async () => Number(await canvas.getAttribute('data-frames')), { timeout: 30_000 })
     .toBeGreaterThanOrEqual(30);
@@ -34,7 +35,7 @@ test.describe('3D world from the graph', () => {
     page,
   }) => {
     await enterWorld(page, 'Modern City');
-    const canvas = await ready(page);
+    const canvas = await ready(page, true);
     await expect(canvas).toHaveAttribute('data-islands', '3');
     // Shared geometry keeps the number of draw calls modest for the sample.
     expect(Number(await canvas.getAttribute('data-draw-calls'))).toBeLessThan(600);
@@ -64,7 +65,7 @@ test.describe('3D world from the graph', () => {
 
   test('selecting highlights dependencies and shared peers, and dims the rest', async ({ page }) => {
     await enterWorld(page, 'Haunted World');
-    const canvas = await ready(page);
+    const canvas = await ready(page, true);
     await expect(canvas).toHaveAttribute('data-highlights', '');
     await focusFromPanel(page, 'web-east-0');
     const highlights = await expect
@@ -139,5 +140,20 @@ test.describe('legend highlighting and nameplates', () => {
     await expect(page.getByRole('button', { name: 'Clear type highlight' })).toBeVisible();
     await panel.getByRole('button', { name: 'Clear type highlight' }).click();
     await expect(canvas).toHaveAttribute('data-highlights', '');
+  });
+});
+
+test.describe('Modern City lighting', () => {
+  test('night preset changes the City scene without changing the graph or selection', async ({ page }) => {
+    await enterWorld(page, 'Modern City');
+    const canvas = await ready(page, true);
+    await focusFromPanel(page, 'web-east-0');
+    const before = await canvas.screenshot();
+    await page.getByRole('button', { name: 'Night lights' }).click();
+    await expect(page.getByRole('button', { name: 'Daylight' })).toBeVisible();
+    await expect(canvas).toHaveAttribute('data-selected', EC2);
+    await page.waitForTimeout(300);
+    const after = await canvas.screenshot();
+    expect(before.equals(after), 'night lighting should visibly change the same city models').toBe(false);
   });
 });

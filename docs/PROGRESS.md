@@ -8,8 +8,8 @@ Source of truth for task status. Detailed subtasks live in `.kiro/specs/*/tasks.
 | 2   | Terraform ingestion, topology resolution, graph inspector    | ✅ Done                     |
 | 3   | Multi-region 3D vertical slice and early Pages build         | ✅ Done (awaiting approval) |
 | 4   | Expanded AWS registry, legend, shared highlighting           | ✅ Done (awaiting approval) |
-| 5   | World library system and Modern City (Blender MCP models)    | —                           |
-| 6   | Haunted World library (Blender MCP models)                   | —                           |
+| 5   | World library system and Modern City (Blender MCP models)    | ✅ Done (awaiting approval) |
+| 6   | Haunted World library (Blender MCP models)                   | ✅ Done (awaiting approval) |
 | 7   | Game interface and synchronized navigation                   | —                           |
 | 8   | Region/AZ variation and saved themes                         | —                           |
 | 9   | Defender rules                                               | —                           |
@@ -19,7 +19,7 @@ Source of truth for task status. Detailed subtasks live in `.kiro/specs/*/tasks.
 | 13  | Create World with an LLM key (DEFERRED, likely out of scope) | —                           |
 
 World instruction sets (`worlds/modern-city`, `haunted-world`, `aqua-world`), the `create-cloudworld-world` Skill,
-the `world-builder` agent and the `create-world` Kiro Workflow are written. Models are still `planned`; they are built in Tasks 5, 6 and 11.
+the `world-builder` agent and the `create-world` Kiro Workflow are written. Modern City and Haunted World are `built`; Aqua is built in Task 11.
 
 ## Cross-browser coverage
 
@@ -33,6 +33,25 @@ Start menu (World, Settings), world select, mission picker, saved defaults, lock
 rule (open sensitive ports) are done. Attack paths across resources, more rules, and 3D finding markers stay in Task 9.
 Hooks added: visual review (Playwright MCP), Blender model review (Blender MCP), GLB validation on save. The `create-world` workflow now takes
 a plain description and deduces the world name.
+
+## Tasks 5 and 6 summary
+
+- Both worlds are original Blender MCP libraries built from scripts (`worlds/<id>/blender/build_library.py`) on a shared kit
+  (`worlds/_shared/blender/cw_kit.py`): Blender Z up exported +Y up (no rotation in the app), three materials (vertex-coloured
+  `paint`, `glow`, `neon`) joined per material, Draco with the decoder self-hosted in `public/draco/`.
+- **Modern City** is a Manhattan-style downtown: 31 GLBs (264 KB). EC2 is sized by `instance_type`: walk-up (nano/micro), limestone
+  mid-rise (small/medium), art-deco skyscraper (large/xlarge), glass supertall (2xlarge+). RDS is a copper-domed rotunda, DynamoDB a
+  tank refinery, Lambda a food truck, the load balancer a Times-Square junction. Props: yellow cabs, food carts, cafés, shop rows.
+- **Haunted World** is a vampire estate: 32 GLBs. EC2 grows from a crooked cottage to a Victorian house, a gated manor and Dracula's
+  castle. RDS is a round moon crypt, DynamoDB a cauldron brewery, the internet gateway a castle gatehouse. Props: hearses, pumpkin
+  heaps, ghosts, little graveyards, dead trees with fairy lights. Orange lantern pools on cobbled lanes.
+- Library data drives the renderer: `scene`/`nightScene` palettes, `streets` (ring roads, sidewalks, lamps, light pools, trees) and
+  `props` (road, sidewalk, empty lot) placed deterministically and instanced. Labels and beacons use measured model heights.
+- Sample plan instance types now vary (`t3.micro`, `t3.small`, `m5.large`, `c6i.xlarge`, `m5.2xlarge`) so the size tiers show.
+- Checks: validator enforces vivid looks (40+ characters), tier and prop keys, and no identical GLB shared between worlds; a unit
+  test checks distinct files, palettes and streets. The skill, template, README and `create-world` workflow now require vivid
+  imagery, size tiers and props.
+- Open: selective bloom is not added (no post-processing yet); emissive strength is tuned so windows stay saturated.
 
 ## Task 4 summary
 

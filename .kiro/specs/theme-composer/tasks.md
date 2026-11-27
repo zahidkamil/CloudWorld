@@ -6,22 +6,22 @@
   - [x] 1.3 `create-cloudworld-world` Skill, `world-builder` agent, `create-world` Kiro Workflow, Aqua instruction set
   - _Requirements: R1.1–R1.3, R1.6_
 
-- [ ] 3. Theme contract
+- [x] 3. Theme contract
   - [x] 3.0 Early slice: `src/themes/variation.ts` (region accents at least 60 degrees apart, AZ tint within 6% lightness), interim palettes per world in `WorldStage`
-  - [ ] 3.1 ThemeDescriptor and library.json Zod schemas, `resolve()` with fallbacks (tests)
-  - [ ] 3.2 Region palette and AZ variant derivation (tests)
+  - [x] 3.1 ThemeDescriptor and library.json Zod schemas, `resolve()` with exact type -> family -> generic fallbacks (tests)
+  - [x] 3.2 Region palette and AZ variant derivation (tests)
   - _Requirements: R1.4, R3.2, R4_
 
-- [ ] 5. Modern City library
-  - [ ] 5.1 Library loader, instancing, procedural fallbacks, shared kit pieces (roads, trees, lamps, vehicles)
-  - [ ] 5.2 Blender MCP: build structure, family, and key-service models from `worlds/modern-city/resources.md`; export GLBs
-  - [ ] 5.3 `library.json`, day and night presets, screenshot review against `docs/images/City-Theme.jpeg`; replace every procedural City silhouette with the City library models
+- [x] 5. Modern City library
+  - [x] 5.1 Library loader, lazy GLB cache, procedural fallbacks, data-driven streets and props (`themes/kits/streets`: ring roads, sidewalks, lamps, trees, instanced props)
+  - [x] 5.2 Blender MCP: Manhattan-style downtown from `worlds/modern-city/resources.md` with the shared kit; EC2 size tiers from `instance_type`; round and industrial databases; street props; Draco GLBs
+  - [x] 5.3 `library.json`, day and night presets, actual scene preview, screenshot review against `docs/images/City-Theme.jpeg`; replace procedural City silhouettes with City library models
   - _Requirements: R1, R2.1, R2.3, R2.4_
 
-- [ ] 6. Haunted World library
-  - [ ] 6.1 Blender MCP: build models from `worlds/haunted-world/resources.md`; export GLBs
-  - [ ] 6.2 `library.json`, dark indigo sky, high-contrast blue slate, orange lantern/candle pools, teal ghost light, fog and selective bloom; screenshot review against `docs/images/Haunted-Theme.jpeg`; replace every procedural Haunted silhouette with the Haunted library models
-  - [ ] 6.3 Theme independence tests (graph, selection, findings unchanged) and a distinctness test (no shared model files, geometry, materials, or layout structure between worlds)
+- [x] 6. Haunted World library
+  - [x] 6.1 Blender MCP: vampire estate from `worlds/haunted-world/resources.md` (cottage -> Victorian -> gated manor -> Dracula castle, crypts, cauldrons, iron gates, props); export GLBs
+  - [x] 6.2 `library.json`, dark indigo sky, blue slate, orange lantern pools, teal ghost light, fog; screenshot review against `docs/images/Haunted-Theme.jpeg`; Haunted library models replace procedural silhouettes. Selective bloom deferred (no post-processing yet)
+  - [x] 6.3 Theme independence tests (graph, selection unchanged on switch) and distinctness checks (`scripts/worlds-distinct.test.ts`, cross-world GLB hash check in `validate-glb`)
   - _Requirements: R2.2, R2.3, R3_
 
 - [ ] 8. Saved themes

@@ -12,6 +12,8 @@ export interface SessionState {
   screen: Screen;
   mode: GameMode;
   themeId: string;
+  /** Lighting preset for Modern City; worlds reuse their models when the light changes. */
+  lightingPreset: 'day' | 'night';
   settings: Settings;
   /** Current infrastructure. Replaced only by a confirmed import (R1.5). */
   graph: InfrastructureGraph | null;
@@ -24,6 +26,7 @@ export interface SessionState {
   updateSettings: (patch: Partial<Omit<Settings, 'version'>>) => void;
   setMode: (mode: GameMode) => void;
   setTheme: (themeId: string) => void;
+  toggleLighting: () => void;
   returnToMenu: () => void;
 }
 
@@ -36,6 +39,7 @@ export const useSession = create<SessionState>((set, get) => ({
   screen: 'title',
   mode: initialSettings.defaultMission,
   themeId: initialSettings.defaultWorld,
+  lightingPreset: 'day',
   settings: initialSettings,
   graph: null,
   importOpen: false,
@@ -54,6 +58,7 @@ export const useSession = create<SessionState>((set, get) => ({
     set({ settings });
   },
   setMode: (mode) => set({ mode }),
-  setTheme: (themeId) => set({ themeId }),
+  setTheme: (themeId) => set({ themeId, lightingPreset: 'day' }),
+  toggleLighting: () => set((s) => ({ lightingPreset: s.lightingPreset === 'day' ? 'night' : 'day' })),
   returnToMenu: () => set({ screen: 'title' }),
 }));

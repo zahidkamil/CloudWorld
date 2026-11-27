@@ -1,4 +1,8 @@
 import { QuadraticBezierLine } from '@react-three/drei';
+import { Suspense } from 'react';
+import { PropField } from '@/themes/kits/streets/PropField';
+import { StreetField } from '@/themes/kits/streets/StreetField';
+import { resolveLibraryModel, type WorldLibrary } from '@/themes/library';
 import { useMemo, type ReactElement } from 'react';
 import type { Highlights } from '@/engine/graph/highlight';
 import type { InfrastructureGraph } from '@/engine/graph/types';
@@ -8,8 +12,10 @@ import { Beacon } from './Beacon';
 import { CameraRig, type FocusTarget } from './CameraRig';
 import { Decor } from './Decor';
 import { Island } from './Island';
+import { GltfLandmark } from './GltfLandmark';
 import { Landmark, type LandmarkLook } from './Landmark';
 import { ResourceLabel } from './ResourceLabel';
+import { shouldShowResourceLabel } from './resourceLabelVisibility';
 import { landmarkKindOf, LANDMARK_HEIGHT, type LandmarkKind } from './landmarkKind';
 import type { ScenePalette } from './palette';
 
@@ -18,10 +24,13 @@ const LINK_COLOR = '#5eead4';
 
 interface WorldSceneProps {
   graph: InfrastructureGraph | null;
+  /** Loaded from public/worlds/<id>/library.json. Null means procedural fallback. */
+  library: WorldLibrary | null;
   layout: WorldLayout;
   palette: ScenePalette;
   highlights: Highlights;
   selectedId: string | null;
+  hoveredId: string | null;
   showLabels: boolean;
   focusId: string | null;
   focusNonce: number;
@@ -38,6 +47,7 @@ interface Placed {
   label: string;
   name: string;
   type: string;
+  model: ReturnType<typeof resolveLibraryModel>;
   kind: LandmarkKind;
   x: number;
   z: number;
@@ -47,10 +57,12 @@ interface Placed {
 /** Draws the layout of a graph: islands, districts, landmarks, highlights, and the camera rig. */
 export function WorldScene({
   graph,
+  library,
   layout,
   palette,
   highlights,
   selectedId,
+  hoveredId,
   showLabels,
   focusId,
   focusNonce,
@@ -87,6 +99,7 @@ export function WorldScene({
           label: r.label,
           name: r.name,
           type: r.type,
+          model: resolveLibraryModel(library, r.type, r.family, r.attributes),
           kind: landmarkKindOf(r.type, r.category),
           x: lot.x,
           z: lot.z,
@@ -98,21 +111,25 @@ export function WorldScene({
         },
       ];
     });
-  }, [graph, layout, accents, palette]);
+  }, [graph, layout, accents, palette, library]);
 
   const positionOf = useMemo(() => new Map(placed.map((p) => [p.id, p])), [placed]);
-  const topOf = (id: string) => PAD_TOP + (LANDMARK_HEIGHT[positionOf.get(id)?.kind ?? 'block'] ?? 2);
+  const topOf = (id: string) => {
+    const p = positionOf.get(id);
+    return PAD_TOP + (p?.model?.height ?? LANDMARK_HEIGHT[p?.kind ?? 'block'] ?? 2);
+  };
   const selected = selectedId ? positionOf.get(selectedId) : undefined;
   const focusPlaced = focusId ? positionOf.get(focusId) : undefined;
   const focus: FocusTarget | null = focusPlaced
     ? { nonce: focusNonce, x: focusPlaced.x, y: PAD_TOP + 1.2, z: focusPlaced.z }
     : null;
   const radius = layout.bounds.radius;
+  const fog = palette.fog ?? 1;
   const layoutKey = `${layout.lots.length}:${layout.islands.map((i) => i.id).join(',')}`;
 
   return (
     <>
-      <fog attach="fog" args={[palette.background, radius * 2.6, radius * 8]} />
+      <fog attach="fog" args={[palette.background, (radius * 2.6) / fog, (radius * 8) / fog]} />
       <hemisphereLight args={[palette.skyLight, palette.groundLight, palette.fillIntensity]} />
       <directionalLight
         color={palette.keyLight}
@@ -141,22 +158,60 @@ export function WorldScene({
         </group>
       ))}
 
+      {/* Street dressing and decorative props come from the world library, so every world brings its own. */}
+      {library?.streets && <StreetField districts={layout.districts} streets={library.streets} />}
+      {library?.props && library.props.length > 0 && (
+        <PropField library={library} props={library.props} districts={layout.districts} lots={layout.lots} />
+      )}
+
       {placed.map((p) => {
         const state = highlights.states.get(p.id) ?? 'none';
-        const labelVisible = showLabels || state === 'primary' || state === 'hover' || state === 'type';
+        // A hovered dependency or peer keeps its relationship colour, but must still reveal its Type (name).
+        const labelVisible = shouldShowResourceLabel(state, p.id, hoveredId, showLabels);
         return (
           <group key={p.id}>
-            <Landmark
-              id={p.id}
-              kind={p.kind}
-              x={p.x}
-              y={PAD_TOP}
-              z={p.z}
-              look={p.look}
-              state={state}
-              onSelect={onSelect}
-              onHover={onHover}
-            />
+            {p.model ? (
+              <Suspense
+                fallback={
+                  <Landmark
+                    id={p.id}
+                    kind={p.kind}
+                    x={p.x}
+                    y={PAD_TOP}
+                    z={p.z}
+                    look={p.look}
+                    state={state}
+                    onSelect={onSelect}
+                    onHover={onHover}
+                  />
+                }
+              >
+                <GltfLandmark
+                  id={p.id}
+                  url={p.model.url}
+                  scale={p.model.scale}
+                  yOffset={p.model.yOffset}
+                  x={p.x}
+                  y={PAD_TOP}
+                  z={p.z}
+                  state={state}
+                  onSelect={onSelect}
+                  onHover={onHover}
+                />
+              </Suspense>
+            ) : (
+              <Landmark
+                id={p.id}
+                kind={p.kind}
+                x={p.x}
+                y={PAD_TOP}
+                z={p.z}
+                look={p.look}
+                state={state}
+                onSelect={onSelect}
+                onHover={onHover}
+              />
+            )}
             <ResourceLabel
               x={p.x}
               y={topOf(p.id) + 0.85}

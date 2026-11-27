@@ -22,7 +22,11 @@ export const REQUIRED_FAMILIES = [
 
 const ENTRY = /^- `([^`]+)` \| model: `([^`]+)` \| (planned|built) \| (.+)$/;
 const KEBAB_GLB = /^[a-z0-9]+(?:-[a-z0-9]+)*\.glb$/;
-const KEY = /^(structure:(region|az|vpc|subnet)|family:[a-z]+|aws_[a-z0-9_]+)$/;
+// `aws_instance.large`: a size tier picked from instance_type. `prop:food-cart`: decorative street life.
+const KEY =
+  /^(structure:(region|az|vpc|subnet)|family:[a-z]+|aws_[a-z0-9_]+(\.(tiny|small|large|huge))?|prop:[a-z0-9]+(?:-[a-z0-9]+)*)$/;
+/** Looks must paint a picture: silhouette, materials, colours, and what it means for the AWS resource. */
+const MIN_LOOK = 40;
 
 /** Parses the small front-matter subset we use: `key: value` lines and `- item` lists. */
 export function parseFrontMatter(text) {
@@ -103,8 +107,10 @@ export function validateWorld(id, dir, root, publicDir) {
     keys.add(e.key);
     if (!KEBAB_GLB.test(e.model))
       errors.push(`${id}: line ${e.line} model "${e.model}" must be kebab-case .glb`);
-    if (e.look.trim().length < 25 || /^\.\.\.$/.test(e.look.trim())) {
-      errors.push(`${id}: line ${e.line} "${e.key}" needs a real look description (25+ characters)`);
+    if (e.look.trim().length < MIN_LOOK || /^\.\.\.$/.test(e.look.trim())) {
+      errors.push(
+        `${id}: line ${e.line} "${e.key}" needs a vivid look description (${MIN_LOOK}+ characters: shape, materials, colours, details)`,
+      );
     }
     if (e.status === 'built' && !existsSync(join(publicDir, id, 'models', e.model))) {
       errors.push(`${id}: "${e.key}" is built but public/worlds/${id}/models/${e.model} is missing`);
@@ -116,8 +122,41 @@ export function validateWorld(id, dir, root, publicDir) {
   if (fm.status === 'built') {
     if (entries.some((e) => e.status !== 'built'))
       errors.push(`${id}: world is "built" but entries are still planned`);
-    if (!existsSync(join(publicDir, id, 'library.json')))
+    const libraryPath = join(publicDir, id, 'library.json');
+    if (!existsSync(libraryPath)) {
       errors.push(`${id}: built world needs public/worlds/${id}/library.json`);
+    } else {
+      try {
+        const library = JSON.parse(readFileSync(libraryPath, 'utf8'));
+        if (library.version !== 1) errors.push(`${id}: library.json needs version 1`);
+        if (library.id !== id) errors.push(`${id}: library.json id must equal the world id`);
+        if (!library.models || typeof library.models !== 'object') {
+          errors.push(`${id}: library.json needs a models object`);
+        } else {
+          const propFiles = new Set((Array.isArray(library.props) ? library.props : []).map((p) => p.file));
+          for (const entry of entries) {
+            if (entry.key.startsWith('prop:')) {
+              if (!propFiles.has(`models/${entry.model}`))
+                errors.push(`${id}: library.json props must include models/${entry.model} for ${entry.key}`);
+              continue;
+            }
+            const mapped = library.models[entry.key];
+            if (!mapped || mapped.file !== `models/${entry.model}`) {
+              errors.push(`${id}: library.json must map ${entry.key} to models/${entry.model}`);
+            }
+          }
+        }
+        if (
+          !library.preview ||
+          typeof library.preview !== 'string' ||
+          !existsSync(join(publicDir, id, library.preview))
+        ) {
+          errors.push(`${id}: built world needs a valid preview file named by library.json`);
+        }
+      } catch {
+        errors.push(`${id}: library.json is not valid JSON`);
+      }
+    }
   }
   return errors;
 }

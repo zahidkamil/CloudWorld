@@ -16,7 +16,8 @@ const WorldStage = lazy(() => import('./WorldStage'));
  * In-world HUD frame. The 3D renderer, legend, and inspector are mounted here in later tasks.
  */
 export function WorldShell() {
-  const { mode, themeId, graph, setGraph, setMode, setTheme, returnToMenu } = useSession();
+  const { mode, themeId, lightingPreset, graph, setGraph, setMode, setTheme, toggleLighting, returnToMenu } =
+    useSession();
   const fit = useSelection((s) => s.fit);
   const showLabels = useSelection((s) => s.showLabels);
   const toggleLabels = useSelection((s) => s.toggleLabels);
@@ -74,6 +75,16 @@ export function WorldShell() {
         <button type="button" className="hud-button" onClick={fit} title="Frame the whole world">
           Fit view
         </button>
+        {themeId === 'modern-city' && (
+          <button
+            type="button"
+            className="hud-button"
+            onClick={toggleLighting}
+            title="Switch Modern City lighting"
+          >
+            {lightingPreset === 'day' ? 'Night lights' : 'Daylight'}
+          </button>
+        )}
         <button
           type="button"
           className={`hud-button${showLabels ? ' is-active' : ''}`}

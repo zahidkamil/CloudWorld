@@ -1,0 +1,340 @@
+{
+  "version": 1,
+  "id": "modern-city",
+  "name": "Modern City",
+  "referenceImages": ["docs/images/City-Theme.jpeg"],
+  "palette": {
+    "sky": "#bfe6fb",
+    "ground": "#7bc043",
+    "earth": "#c8794a",
+    "base": "#d8c3a5",
+    "roof": "#4f5d73",
+    "accent": "#f3a6c8",
+    "glow": "#ffd479"
+  },
+  "scene": {
+    "background": "#bfe6fb",
+    "ground": "#7bc043",
+    "earth": "#c8794a",
+    "base": "#d8c3a5",
+    "roof": "#cfd3dc",
+    "accent": "#f3a6c8",
+    "glow": "#ffd479",
+    "skyLight": "#d9f1ff",
+    "groundLight": "#8a7a5a",
+    "keyLight": "#fff1d6",
+    "keyIntensity": 2.4,
+    "fillIntensity": 0.9,
+    "decor": "blossom",
+    "fog": 1.0
+  },
+  "nightScene": {
+    "background": "#07142d",
+    "ground": "#1d3b36",
+    "earth": "#26304f",
+    "base": "#33445d",
+    "roof": "#254d65",
+    "accent": "#5eead4",
+    "glow": "#7df9ff",
+    "skyLight": "#263d78",
+    "groundLight": "#0b1224",
+    "keyLight": "#819cff",
+    "keyIntensity": 1.0,
+    "fillIntensity": 0.45,
+    "decor": "blossom",
+    "fog": 1.0
+  },
+  "streets": {
+    "road": "#3a3d4a",
+    "sidewalk": "#dcd5c6",
+    "marking": "#f2c94c",
+    "crosswalk": "#f3efe6",
+    "lampPost": "#4a5563",
+    "lampGlow": "#ffd479",
+    "lightPools": false
+  },
+  "lighting": {
+    "preset": "day"
+  },
+  "camera": {
+    "elevation": 36,
+    "yaw": 45,
+    "minDistance": 7,
+    "maxDistance": 140
+  },
+  "models": {
+    "structure:region": {
+      "file": "models/region-island.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.56
+    },
+    "structure:az": {
+      "file": "models/az-district.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.13
+    },
+    "structure:vpc": {
+      "file": "models/vpc-boundary.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.85
+    },
+    "structure:subnet": {
+      "file": "models/subnet-lot.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.26
+    },
+    "family:compute": {
+      "file": "models/ec2-midrise.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 4.96
+    },
+    "family:containers": {
+      "file": "models/containers-port.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.03
+    },
+    "family:serverless": {
+      "file": "models/lambda-food-truck.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.56
+    },
+    "family:database": {
+      "file": "models/rds-dome.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.15
+    },
+    "family:storage": {
+      "file": "models/s3-warehouse.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.44
+    },
+    "family:gateway": {
+      "file": "models/igw-bridge-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.3
+    },
+    "family:loadbalancer": {
+      "file": "models/lb-plaza.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.37
+    },
+    "family:edge": {
+      "file": "models/edge-broadcast-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 4.6
+    },
+    "family:messaging": {
+      "file": "models/messaging-subway.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 0.84
+    },
+    "family:security": {
+      "file": "models/kms-bank-vault.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.57
+    },
+    "family:monitoring": {
+      "file": "models/monitoring-clocktower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 5.1
+    },
+    "family:generic": {
+      "file": "models/generic-bodega.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.61
+    },
+    "aws_instance": {
+      "file": "models/ec2-midrise.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 4.96
+    },
+    "aws_instance.tiny": {
+      "file": "models/ec2-walkup.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.76
+    },
+    "aws_instance.small": {
+      "file": "models/ec2-midrise.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 4.96
+    },
+    "aws_instance.large": {
+      "file": "models/ec2-skyscraper.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 8.56
+    },
+    "aws_instance.huge": {
+      "file": "models/ec2-supertall.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 11.66
+    },
+    "aws_s3_bucket": {
+      "file": "models/s3-warehouse.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.44
+    },
+    "aws_db_instance": {
+      "file": "models/rds-dome.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.15
+    },
+    "aws_dynamodb_table": {
+      "file": "models/dynamodb-refinery.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.73
+    },
+    "aws_lambda_function": {
+      "file": "models/lambda-food-truck.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.56
+    },
+    "aws_lb": {
+      "file": "models/lb-plaza.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.37
+    },
+    "aws_nat_gateway": {
+      "file": "models/nat-tollbooth.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.2
+    },
+    "aws_internet_gateway": {
+      "file": "models/igw-bridge-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 3.3
+    },
+    "aws_security_group": {
+      "file": "models/sg-checkpoint.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 0.94
+    },
+    "aws_iam_role": {
+      "file": "models/iam-city-hall.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 2.44
+    },
+    "aws_kms_key": {
+      "file": "models/kms-bank-vault.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.57
+    },
+    "aws_sqs_queue": {
+      "file": "models/messaging-subway.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 0.84
+    },
+    "aws_route53_zone": {
+      "file": "models/edge-broadcast-tower.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 4.6
+    },
+    "aws_vpc": {
+      "file": "models/vpc-boundary.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.85
+    },
+    "aws_subnet": {
+      "file": "models/subnet-lot.glb",
+      "scale": 0.42,
+      "yOffset": 0,
+      "height": 1.26
+    },
+    "aws_route_table": {
+      "file": "models/street-sign.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 1.16
+    },
+    "aws_route_table_association": {
+      "file": "models/fire-hydrant.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 0.52
+    },
+    "aws_lb_target_group_attachment": {
+      "file": "models/fire-hydrant.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 0.52
+    },
+    "aws_db_subnet_group": {
+      "file": "models/fire-hydrant.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 0.52
+    },
+    "aws_eip": {
+      "file": "models/payphone.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 0.92
+    },
+    "aws_lb_target_group": {
+      "file": "models/taxi-stand.glb",
+      "scale": 0.36,
+      "yOffset": 0,
+      "height": 0.9
+    }
+  },
+  "props": [
+    {
+      "file": "models/prop-yellow-cab.glb",
+      "placement": "road",
+      "perDistrict": 3,
+      "scale": 0.34
+    },
+    {
+      "file": "models/prop-food-cart.glb",
+      "placement": "sidewalk",
+      "perDistrict": 2,
+      "scale": 0.3
+    },
+    {
+      "file": "models/prop-cafe.glb",
+      "placement": "lot",
+      "perDistrict": 1,
+      "scale": 0.44
+    },
+    {
+      "file": "models/prop-shop-row.glb",
+      "placement": "lot",
+      "perDistrict": 1,
+      "scale": 0.44
+    }
+  ],
+  "preview": "preview.webp"
+}

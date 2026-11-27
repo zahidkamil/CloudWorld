@@ -24,7 +24,7 @@ export function ResourceLabel({ x, y, z, type, name, state, visible }: ResourceL
       distanceFactor={12}
     >
       <span className="resource-label__type">{type}</span>
-      <span className="resource-label__name">{name}</span>
+      <span className="resource-label__name">({name})</span>
     </Html>
   );
 }
